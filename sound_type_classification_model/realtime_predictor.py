@@ -15,6 +15,7 @@ from collections import deque
 import argparse
 
 from input3second import readInput
+from collections import Counter 
 
 parser = argparse.ArgumentParser(description='Run sound classifier')
 parser.add_argument('--input', '-i', default='0', type=int,
@@ -40,10 +41,15 @@ def callback(in_data, frame_count, time_info, status):
 
 def on_predicted(ensembled_pred):
     result = np.argmax(ensembled_pred)
-    print(conf.labels[result], ensembled_pred[result])
+    # print(conf.labels[result], ensembled_pred[result])
+
+    return conf.labels[result]
 
 raw_audio_buffer = []
+preds_list = []
+
 pred_queue = deque(maxlen=conf.pred_ensembles)
+
 def main_process(model, on_predicted):
     # Pool audio data
     global raw_audio_buffer
@@ -66,7 +72,10 @@ def main_process(model, on_predicted):
     for raw_pred in raw_preds:
         pred_queue.append(raw_pred)
         ensembled_pred = geometric_mean_preds(np.array([pred for pred in pred_queue]))
-        on_predicted(ensembled_pred)
+        # on_predicted(ensembled_pred)
+        
+        # list에 추가
+        preds_list.append(on_predicted(ensembled_pred))
 
 # # Main controller
 ## 파일이 입력되었을때 돌아가는 함수
@@ -104,6 +113,15 @@ def run_predictor():
     # file mode (-f 파일경로 )
     if args.input_file != '':
         process_file(model, args.input_file)
+        # print(preds_list)
+        
+        if preds_list != []:
+            cnt = Counter(preds_list)
+            print(cnt.most_common(1)[0][0])
+        else:
+            # 이쪽 이쁘게 수정
+            print("빈 리스트 입니다.")
+
         my_exit(model)
 
     # device list display mode (-i -1)
