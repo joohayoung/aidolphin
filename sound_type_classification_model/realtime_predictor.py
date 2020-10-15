@@ -41,7 +41,7 @@ def callback(in_data, frame_count, time_info, status):
 
 def on_predicted(ensembled_pred):
     result = np.argmax(ensembled_pred)
-    # print(conf.labels[result], ensembled_pred[result])
+    print(conf.labels[result], ensembled_pred[result])
 
     return conf.labels[result]
 
@@ -107,6 +107,15 @@ def get_model(graph_file):
         keras_learning_phase_name=model_node[conf.model][1],
         output_name=model_node[conf.model][2])
 
+def one_result_print(preds_list):
+
+    if preds_list != []:
+            cnt = Counter(preds_list)
+            print(cnt.most_common(1)[0][0])
+    else:
+        # 이쪽 이쁘게 수정
+        print("빈 리스트 입니다.")
+
 def run_predictor():
     model = get_model(args.model_pb_graph)
 
@@ -114,13 +123,7 @@ def run_predictor():
     if args.input_file != '':
         process_file(model, args.input_file)
         # print(preds_list)
-        
-        if preds_list != []:
-            cnt = Counter(preds_list)
-            print(cnt.most_common(1)[0][0])
-        else:
-            # 이쪽 이쁘게 수정
-            print("빈 리스트 입니다.")
+        one_result_print(preds_list)
 
         my_exit(model)
 
@@ -146,7 +149,7 @@ def run_predictor():
             )
 
     # main loop
-    print("start recording")
+    print("===start recording===")
     stream.start_stream()
     while stream.is_active() : 
         main_process(model, on_predicted)
@@ -156,9 +159,11 @@ def run_predictor():
             break
     stream.stop_stream()
     stream.close()
-    print("finished recording")
+    print("===finished recording===")
     # finish 
     audio.terminate()
+    one_result_print(preds_list)
+
     my_exit(model)
 
 if __name__ == '__main__':
