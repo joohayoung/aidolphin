@@ -1,1 +1,1 @@
-moduleName = 'apps.config'
+moduleName = 'apps.fsdkaggle2018.config'
