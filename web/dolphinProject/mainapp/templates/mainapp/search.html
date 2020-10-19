@@ -7,6 +7,7 @@
 
 {% block content %}
     <div id='search_container'>
+        <!-- 조건선택 -->
         <div id ="option_container">
             <form action="" method="POST" name="option">
                 {% csrf_token %}
@@ -48,6 +49,7 @@
                 <label for="최신순">최신순</label>
             </form>
         </div>
+        <!-- 결과 -->
         <div id='result'>
             show result
             <div>
