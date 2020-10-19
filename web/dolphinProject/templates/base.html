@@ -15,8 +15,8 @@
         <div id='container'>
             <img class='logo' src="{% static 'image/logo.png' %}" alt='ai dolphin logo'>
             <ul>
-                <li>About Us</li>
-                <li>ai-dolphin</li>
+                <li><a href="{% url 'subapp:about' %}"> About Us</a></li>
+                <li><a href="{% url 'mainapp:home' %}">ai-dolphin</a></li>
                 <!-- 로그인하지 않은 사용자 -->
                 <li>Log-In</li>
                 <li>Sign-In</li>
