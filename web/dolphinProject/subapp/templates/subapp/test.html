@@ -1,0 +1,36 @@
+<!-- base 템플릿을 불러오는 부분 -->
+{% extends 'base.html' %}
+{% load static %}
+
+<!-- head 부분 추가로 들어갈 내용 -->
+{% block style %}
+    <!-- 추가할내용(css, javascript, ... )이 있을 경우 여기에 추가(없으면 빈칸) -->
+    <link rel="stylesheet" href="{% static 'subapp/test.css' %}"> 
+{% endblock %}
+
+<!-- body 부분에 들어갈 내용 -->
+{% block content %}
+    <h1>테스트 페이지</h1>
+    <div>
+        accountapp: 로그인 관련기능 <br>
+        ㄴlogin.html <br><br>
+
+        mainapp : 검색기능(주기능)/ 나중에 DB들어갈 app(아마도...) <br>
+        ㄴhome.html search.html <br><br>
+
+        subapp : 추가 기능 <br>
+        ㄴ about.html, detail.html <br>
+        ㄴ test(예시/테스트 파일) <br><br>
+
+        * 각 앱별 urls.py에서 urlpattern 정의 ( dolphinProject > urls.py (x) ) <br>
+        * templates, static 폴더에서 파일 불러올때 앱이름/파일 형태로 가져오기 <br><br>
+    </div>
+    <div>
+        이미지 파일 불러오기 예시 <br>
+        1. root 디렉토리 static>image>파일 <br>
+        <img src="{% static 'image/search@0.5x.png' %}" alt="전체이미지예시"> <br>
+        2. 앱 > static> image>파일 <br>
+        <img src="{% static 'subapp/image/sample.png' %}" alt="앱이미지예시"><br>
+    </div>
+    
+{% endblock %}

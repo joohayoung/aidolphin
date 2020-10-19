@@ -1,0 +1,9 @@
+#option_container{
+    border: solid red;
+}
+#search_container{
+    display: flex;
+}
+#result{
+    border: solid palegreen;
+}

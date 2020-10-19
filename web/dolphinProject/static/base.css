@@ -1,0 +1,40 @@
+#nav{
+    border: solid green;
+}
+#bottom{
+    border: solid yellow;
+}
+#main{
+    border: solid pink
+}
+
+#container{
+    display: flex;
+}
+.search {
+    height: 70px;
+    padding: 10px;
+    border: solid red;
+}
+
+.search-input {
+    border: 0;
+    outline: 0;
+    line-height: 40px;
+    width: 550px;
+    font-size: 21px;
+}
+
+.search-icon {
+    height: 50px;
+    width: 50px;
+    float: right;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #536bf6
+}
+
+.search-icon img{
+    width: 25px;
+}

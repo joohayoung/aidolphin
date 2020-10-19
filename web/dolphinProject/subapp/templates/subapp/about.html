@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+    <!-- 추가할내용이 있을경우(없으면 빈칸) -->
+    <link rel="stylesheet" href="{% static 'subapp/about.css' %}"> 
+{% endblock %}
+
+{% block content %}
+    <h1>about ai dolphin</h1>
+{% endblock %}

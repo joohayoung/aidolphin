@@ -1,0 +1,18 @@
+{% extends 'basehome.html' %}
+{% load static %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'mainapp/home.css' %}"> 
+{% endblock %}
+
+{% block content %}
+    <div id=banner>
+        <img class='banner_img' src="{% static 'image/banner.png' %}" alt='banner'>
+    </div>
+    <div class="search">
+        <input type="text" class="search-input" placeholder="search...">
+        <a href="#" class="search-icon">
+            <img src="{% static 'image/white_search@0.5x.png' %}" alt='search icon'>
+        </a>
+    </div>
+{% endblock %}

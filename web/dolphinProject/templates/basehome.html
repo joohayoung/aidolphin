@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ai dolphin - 세상의 모든 음향</title>
+    <link rel="stylesheet" href="{% static 'base.css' %}" type="test/css">
+    {% block style %}
+    {% endblock %}
+</head>
+<body>
+    <div id='nav'>
+        <div id='container'>
+            <img class='logo' src="{% static 'image/logo.png' %}" alt='ai dolphin logo'>
+            <ul>
+                <li>About Us</li>
+                <li>ai-dolphin</li>
+                <!-- 로그인하지 않은 사용자 -->
+                <li>Log-In</li>
+                <li>Sign-In</li>
+                <!-- 로그인 한 사용자 -->
+                <li>My Page</li>
+                <li>Log-Out</li>
+            </ul>         
+        </div>
+    </div>
+    {% block content %}
+    {% endblock %}
+    <div id='bottom'>
+        회사 정보<br>
+        연락처<br>
+        주소<br>
+        기타 등듣
+    </div>
+</body>
+</html>
