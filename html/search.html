@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ai dolphin - 세상의 모든 음향</title>
+    <link rel="stylesheet" type="text/css" href="css/search.css">
+    <link rel="stylesheet" type="text/css" href="css/base.css">
+</head>
+<body>
+    <div id='nav'>
+        <div id='container'>
+            <img class='logo' src='img/logo.png' alt='ai dolphin logo'>
+            <ul>
+                <li>About Us</li>
+                <li>ai-dolphin</li>
+                <!-- 로그인하지 않은 사용자 -->
+                <li>Log-In</li>
+                <li>Sign-In</li>
+                <!-- 로그인 한 사용자 -->
+                <li>My Page</li>
+                <li>Log-Out</li>
+            </ul>
+            <!-- home 화면 제외 모든페이지에서 -->
+            <div class="search">
+                <input type="text" class="search-input" placeholder="search...">
+                <a href="#" class="search-icon">
+                    <img src='img/white_search@0.5x.png' alt='search icon'>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div id='main'>
+        <!-- 여기까지 공통 부분 base.html -->
+        <div id='search_container'>
+            <div id ="option_container">
+                <form action="{% url 'home' %}" method="POST" name="option">
+                    {% csrf_token %}
+                    <h3>상세조건</h3>
+                    저작권 : {{license}} <br>
+                    정렬기준 : {{sort}}} <br>
+                    <br>
+                    <div class='space_around_ct'>
+                        <button id='option_bt' type="reset">초기화</button>
+                        <button id='option_bt' type="submit">적용</button>
+                    </div>
+
+                    <h4>저작권</h4>
+                    <input type="checkbox" name="category[]" value="전체"id="전체_cate">
+                    <label for="전체_cate">전체</label>
+                    <br>
+                    <input type="checkbox" name="category[]" value="100% free"id="100% free">
+                    <label for="100% free">100% free</label>
+                    <br>
+                    <input type="checkbox" name="category[]" value="free_for_personal_use"id="free_for_personal_use">
+                    <label for="free_for_personal_use">free_for_personal_use</label>
+                    <br>
+                    <input type="checkbox" name="category[]" value="donationware"id="donationware">
+                    <label for="donationware">donationware</label>
+                    <br>
+                    <input type="checkbox" name="category[]" value="shareware"id="shareware">
+                    <label for="shareware">shareware</label>
+                    <br>
+                    <input type="checkbox" name="category[]" value="demo"id="demo">
+                    <label for="demo">demo</label>
+
+                    
+                    <h4>정렬기준</h4>
+                    <input type="checkbox" name="region[]" value="유사도(기본)"id="유사도(기본)_re">
+                    <label for="유사도(기본)_re">유사도(기본)</label>
+                    <input type="checkbox" name="region[]" value="다운 많은 순"id="다운 많은 순">
+                    <label for="다운 많은 순">다운 많은 순</label><br>
+                    <input type="checkbox" name="region[]" value="좋아요 많은 순"id="좋아요 많은 순">
+                    <label for="좋아요 많은 순">좋아요 많은 순</label><br>
+                    <input type="checkbox" name="region[]" value="최신순"id="최신순">
+                    <label for="최신순">최신순</label>
+                </form>
+            </div>
+            <div id='result'>
+                show result
+                <div>
+                    <h4>file name</h4>
+                    <audio src='music/00c9e799.wav' controls></audio>
+                </div>
+                <div>
+                    <h4>file name</h4>
+                    <audio src='music/00c9e799.wav' controls></audio>
+                </div>
+                <div>
+                    <h4>file name</h4>
+                    <audio src='music/00c9e799.wav' controls></audio>
+                </div>
+            </div>
+        </div>
+        <!-- 여기부터 공통 부분 base.html -->
+    </div>
+    <div id='bottom'>
+        회사 정보<br>
+        연락처<br>
+        주소<br>
+        기타 등듣
+    </div>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ai dolphin - 세상의 모든 음향</title>
+    <link rel="stylesheet" type="text/css" href="css/login.css">
+    <link rel="stylesheet" type="text/css" href="css/base.css">
+</head>
+<body>
+    <div id='nav'>
+        <div id='container'>
+            <img class='logo' src='img/logo.png' alt='ai dolphin logo'>
+            <ul>
+                <li>About Us</li>
+                <li>ai-dolphin</li>
+                <!-- 로그인하지 않은 사용자 -->
+                <li>Log-In</li>
+                <li>Sign-In</li>
+                <!-- 로그인 한 사용자 -->
+                <li>My Page</li>
+                <li>Log-Out</li>
+            </ul>
+            <!-- home 화면 제외 모든페이지에서 -->
+            <div class="search">
+                <input type="text" class="search-input" placeholder="search...">
+                <a href="#" class="search-icon">
+                    <img src='img/white_search@0.5x.png' alt='search icon'>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div id='main'>
+        <!-- 여기까지 공통 부분 base.html -->
+        <div id='login_box'>
+            <h3>login</h3>
+            <div>
+                <label class='log_lb' for="username">아이디</label>
+                <input type="text" id = 'username' placeholder="아이디" name="username">
+            </div>
+            <div >
+                <label class='log_lb' for="password">비밀번호</label>
+                <input type="password" id='password' placeholder="비밀번호" name="password">
+            </div>
+            <button type="submit">로그인</button>
+        </div>
+
+        <!-- 여기부터 공통 부분 base.html -->
+    </div>
+    <div id='bottom'>
+        회사 정보<br>
+        연락처<br>
+        주소<br>
+        기타 등듣
+    </div>
+</body>
+</html>
