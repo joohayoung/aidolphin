@@ -1,4 +1,20 @@
+
 #banner{
-    border: solid blue;
+    position: absolute;
+    z-index: -1;
 }
 
+#banner img{
+    width: 100%;
+}
+
+#live{
+    color: white;
+}
+#file{
+    color: white;
+}
+
+#banner_text{
+    color: white;
+}

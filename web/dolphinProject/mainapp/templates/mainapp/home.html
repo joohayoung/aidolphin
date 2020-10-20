@@ -7,9 +7,14 @@
 
 {% block content %}
     <div id="banner">
-        <img class='banner_img' src="{% static 'image/banner.png' %}" alt='banner'>
+        <img class='banner_img' src="{% static 'image/banner2.png' %}" alt='banner'>
     </div>
     <!-- 키워드 검색 -->
+    <div id='banner_text'>
+    Ai Dolphin<br>
+    가장 빠르고 정확한 음향 분석과 검색 Ai<br>
+    이제 음향은 dolphin으로!
+    </div>
     <div class="search">
         <input type="text" class="search-input" placeholder="search...">
         <a href="#" class="search-icon">
@@ -17,7 +22,7 @@
         </a>
     </div>
     <!-- 실시간검색 -->
-    <div>
+    <div id='live'>
         녹음버튼
         종료버튼
         분석
@@ -25,7 +30,7 @@
         다시녹음(추가)
     </div>
     <!-- 파일검색 -->
-    <div>
+    <div id='file'>
         파일업로드
         분석하기
     </div>
