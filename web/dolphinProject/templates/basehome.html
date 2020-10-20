@@ -5,14 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ai dolphin - 세상의 모든 음향</title>
-    <link rel="stylesheet" href="{% static 'base.css' %}" type="test/css">
+    <link rel="stylesheet" href="{% static 'base.css' %}" type="text/css">
     {% block style %}
     {% endblock %}
 </head>
 <body>
     <div id='nav'>
         <div id='container'>
-            <img class='logo' src="{% static 'image/logo.png' %}" alt='ai dolphin logo'>
+            <img class='logo' src="{% static 'image/logo_text.png' %}" alt='ai dolphin logo'>
             <ul>
                 <li><a href="{% url 'subapp:about' %}">About Us</a></li>
                 <li><a href="{% url 'mainapp:home' %}">ai-dolphin</a></li>
@@ -28,10 +28,7 @@
     {% block content %}
     {% endblock %}
     <div id='bottom'>
-        회사 정보<br>
-        연락처<br>
-        주소<br>
-        기타 등듣
+        Made with aloha dolphin in South Korea © 2020 ai dolphin. All rights reserved.
     </div>
 </body>
 </html>
