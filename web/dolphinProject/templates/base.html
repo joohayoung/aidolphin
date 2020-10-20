@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ai dolphin - 세상의 모든 음향</title>
-    <link rel="stylesheet" href="{% static 'base.css' %}" type="test/css">
+    <link rel="stylesheet" href="{% static 'base.css' %}" type="text/css">
     {% block style %}
     <!-- 각 html 파일별 추가 파일 들어가는 부분 -->
     {% endblock %}
@@ -13,10 +13,18 @@
 <body>
     <div id='nav'>
         <div id='container'>
-            <img class='logo' src="{% static 'image/logo_text.png' %}" alt='ai dolphin logo'>
+            <a href="{% url 'mainapp:home' %}">
+                <img class='logo' src="{% static 'image/logo_text.png' %}" alt='ai dolphin logo'>
+            </a>
+            <div class="search">
+                <input type="text" class="search-input" placeholder="search...">
+                <a href="#" class="search-icon">
+                    <img src="{% static 'image/white_search@0.5x.png' %}" alt='search icon'>
+                </a>
+            </div>
             <ul>
-                <li><a href="{% url 'subapp:about' %}"> About Us</a></li>
                 <li><a href="{% url 'mainapp:home' %}">ai-dolphin</a></li>
+                <li><a href="{% url 'subapp:about' %}">About Us</a></li>
                 
                 {% if user.is_authenticated %}
                 <!-- 로그인 한 사용자 -->
@@ -34,12 +42,6 @@
                 {% endif %}
             </ul>
             <!-- home 화면 제외 모든페이지에서 -->
-            <div class="search">
-                <input type="text" class="search-input" placeholder="search...">
-                <a href="#" class="search-icon">
-                    <img src="{% static 'image/white_search@0.5x.png' %}" alt='search icon'>
-                </a>
-            </div>
         </div>
     </div>
     {% block content %}

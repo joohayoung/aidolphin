@@ -13,10 +13,12 @@
 <body>
     <div id='nav'>
         <div id='container'>
-            <img class='logo' src="{% static 'image/logo_text.png' %}" alt='ai dolphin logo'>
+            <a href="{% url 'mainapp:home' %}">
+                <img class='logo' src="{% static 'image/logo_text.png' %}" alt='ai dolphin logo'>
+            </a>
             <ul>
-                <li><a href="{% url 'subapp:about' %}"> About Us</a></li>
                 <li><a href="{% url 'mainapp:home' %}">ai-dolphin</a></li>
+                <li><a href="{% url 'subapp:about' %}">About Us</a></li>
                 
                 {% if user.is_authenticated %}
                 <!-- 로그인 한 사용자 -->
