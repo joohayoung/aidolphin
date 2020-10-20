@@ -13,16 +13,25 @@
 <body>
     <div id='nav'>
         <div id='container'>
-            <img class='logo' src="{% static 'image/logo.png' %}" alt='ai dolphin logo'>
+            <img class='logo' src="{% static 'image/logo_text.png' %}" alt='ai dolphin logo'>
             <ul>
                 <li><a href="{% url 'subapp:about' %}"> About Us</a></li>
                 <li><a href="{% url 'mainapp:home' %}">ai-dolphin</a></li>
-                <!-- 로그인하지 않은 사용자 -->
-                <li>Log-In</li>
-                <li>Sign-In</li>
+                
+                {% if user.is_authenticated %}
                 <!-- 로그인 한 사용자 -->
-                <li>My Page</li>
-                <li>Log-Out</li>
+                    <li>My Page</li>
+                    <li>
+                        <form action="{% url 'accountapp:logout' %}" method="POST">
+                            {% csrf_token %}
+                            <button type = submit>Log-Out</button>
+                        </form>
+                    </li>
+                {% else %}
+                    <!-- 로그인하지 않은 사용자 -->
+                    <li><a href="{% url 'accountapp:login' %}">Log-In</a></li>
+                    <li><a href="{% url 'accountapp:sign_up' %}">Sign-Up</a></li>
+                {% endif %}
             </ul>
             <!-- home 화면 제외 모든페이지에서 -->
             <div class="search">

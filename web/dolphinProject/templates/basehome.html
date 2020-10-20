@@ -5,8 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ai dolphin - 세상의 모든 음향</title>
-    <link rel="stylesheet" href="{% static 'base.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'base.css' %}" type="test/css">
     {% block style %}
+    <!-- 각 html 파일별 추가 파일 들어가는 부분 -->
     {% endblock %}
 </head>
 <body>
@@ -14,18 +15,28 @@
         <div id='container'>
             <img class='logo' src="{% static 'image/logo_text.png' %}" alt='ai dolphin logo'>
             <ul>
-                <li><a href="{% url 'subapp:about' %}">About Us</a></li>
+                <li><a href="{% url 'subapp:about' %}"> About Us</a></li>
                 <li><a href="{% url 'mainapp:home' %}">ai-dolphin</a></li>
-                <!-- 로그인하지 않은 사용자 -->
-                <li>Log-In</li>
-                <li>Sign-In</li>
+                
+                {% if user.is_authenticated %}
                 <!-- 로그인 한 사용자 -->
-                <li>My Page</li>
-                <li>Log-Out</li>
-            </ul>         
+                    <li>My Page</li>
+                    <li>
+                        <form action="{% url 'accountapp:logout' %}" method="POST">
+                            {% csrf_token %}
+                            <button type = submit>Log-Out</button>
+                        </form>
+                    </li>
+                {% else %}
+                    <!-- 로그인하지 않은 사용자 -->
+                    <li><a href="{% url 'accountapp:login' %}">Log-In</a></li>
+                    <li><a href="{% url 'accountapp:sign_up' %}">Sign-Up</a></li>
+                {% endif %}
+            </ul>
         </div>
     </div>
     {% block content %}
+    <!-- 여기에 각 html별 body내용 들어가는 부분 -->
     {% endblock %}
     <div id='bottom'>
         Made with aloha dolphin in South Korea © 2020 ai dolphin. All rights reserved.

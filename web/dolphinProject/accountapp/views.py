@@ -31,7 +31,7 @@ def login(request):
     context={}
 
     # POST Method
-    if request.method == "POST"
+    if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
         if username and password:
@@ -54,7 +54,7 @@ def login(request):
     return render(request, 'accountapp/login.html', context)
 
 def logout(request):
-    if request.method == "POST"
+    if request.method == "POST":
         auth.logout(request)
     # 로그아웃하면 홈으로
     return redirect("mainapp:home")
