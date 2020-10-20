@@ -13,10 +13,21 @@
 <body>
     <div id='nav'>
         <div id='container'>
-            <img class='logo' src="{% static 'image/logo_text.png' %}" alt='ai dolphin logo'>
+            <a href="{% url 'mainapp:home' %}">
+                <img class='logo' src="{% static 'image/logo_text.png' %}" alt='ai dolphin logo'>
+            </a>
+            <div class="search">
+                <form action="{% url 'mainapp:search' %}" method="GET">
+                    {% csrf_token %}
+                    <input type="text" class="search-input" placeholder="search..." name="kw">
+                    <button type="submit" class="search-icon">
+                        <img src="{% static 'image/white_search@0.5x.png' %}" alt='search icon'>
+                    </button>
+                </form>
+            </div>
             <ul>
-                <li><a href="{% url 'subapp:about' %}"> About Us</a></li>
                 <li><a href="{% url 'mainapp:home' %}">ai-dolphin</a></li>
+                <li><a href="{% url 'subapp:about' %}">About Us</a></li>
                 
                 {% if user.is_authenticated %}
                 <!-- 로그인 한 사용자 -->
@@ -33,16 +44,6 @@
                     <li><a href="{% url 'accountapp:sign_up' %}">Sign-Up</a></li>
                 {% endif %}
             </ul>
-            <!-- home 화면 제외 모든페이지에서 -->
-            <div class="search">
-                <form action="{% url 'mainapp:search' %}" method="GET">
-                    {% csrf_token %}
-                    <input type="text" class="search-input" placeholder="search..." name="kw">
-                    <button type="submit">
-                        <img src="{% static 'image/white_search@0.5x.png' %}" alt='search icon'>
-                    </button>
-                </form>
-            </div>
         </div>
     </div>
     {% block content %}
