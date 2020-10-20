@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ai dolphin - 세상의 모든 음향</title>
-    <link rel="stylesheet" href="{% static 'base.css' %}" type="test/css">
+    <link rel="stylesheet" href="{% static 'base.css' %}" type="text/css">
     {% block style %}
     <!-- 각 html 파일별 추가 파일 들어가는 부분 -->
     {% endblock %}
@@ -35,10 +35,13 @@
             </ul>
             <!-- home 화면 제외 모든페이지에서 -->
             <div class="search">
-                <input type="text" class="search-input" placeholder="search...">
-                <a href="#" class="search-icon">
-                    <img src="{% static 'image/white_search@0.5x.png' %}" alt='search icon'>
-                </a>
+                <form action="{% url 'mainapp:search' %}" method="GET">
+                    {% csrf_token %}
+                    <input type="text" class="search-input" placeholder="search..." name="kw">
+                    <button type="submit">
+                        <img src="{% static 'image/white_search@0.5x.png' %}" alt='search icon'>
+                    </button>
+                </form>
             </div>
         </div>
     </div>

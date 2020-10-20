@@ -9,61 +9,67 @@
     <div id='search_container'>
         <!-- 조건선택 -->
         <div id ="option_container">
-            <form action="" method="POST" name="option">
+            <form action="{% url 'mainapp:search' %}" method="GET" name="option">
                 {% csrf_token %}
                 <h3>상세조건</h3>
-                저작권 : {{license}} <br>
-                정렬기준 : {{sort}}} <br>
+                저작권 : {{ license }} <br>
+                정렬기준 : {{ sort }} <br>
                 <br>
                 <div class='space_around_ct'>
                     <button id='option_bt' type="reset">초기화</button>
                     <button id='option_bt' type="submit">적용</button>
+                    <input type="hidden" name='kw' value="{{ kw|default_if_none:'' }}">
                 </div>
 
                 <h4>저작권</h4>
-                <input type="checkbox" name="category[]" value="전체"id="전체_cate">
+                <input type="checkbox" name="license[]" value="전체"id="전체">
                 <label for="전체_cate">전체</label>
                 <br>
-                <input type="checkbox" name="category[]" value="100% free"id="100% free">
+                <input type="checkbox" name="license[]" value="100% free"id="100% free">
                 <label for="100% free">100% free</label>                    <br>
-                <input type="checkbox" name="category[]" value="free_for_personal_use"id="free_for_personal_use">
+                <input type="checkbox" name="license[]" value="free_for_personal_use"id="free_for_personal_use">
                 <label for="free_for_personal_use">free_for_personal_use</label>
                 <br>
-                <input type="checkbox" name="category[]" value="donationware"id="donationware">
+                <input type="checkbox" name="license[]" value="donationware"id="donationware">
                 <label for="donationware">donationware</label>                    <br>
-                <input type="checkbox" name="category[]" value="shareware"id="shareware">
+                <input type="checkbox" name="license[]" value="shareware"id="shareware">
                 <label for="shareware">shareware</label>
                 <br>
-                <input type="checkbox" name="category[]" value="demo"id="demo">
+                <input type="checkbox" name="license[]" value="demo"id="demo">
                 <label for="demo">demo</label>
 
                     
                 <h4>정렬기준</h4>
-                <input type="checkbox" name="region[]" value="유사도(기본)"id="유사도(기본)_re">
-                <label for="유사도(기본)_re">유사도(기본)</label>
-                <input type="checkbox" name="region[]" value="다운 많은 순"id="다운 많은 순">
-                <label for="다운 많은 순">다운 많은 순</label><br>
-                <input type="checkbox" name="region[]" value="좋아요 많은 순"id="좋아요 많은 순">
-                <label for="좋아요 많은 순">좋아요 많은 순</label><br>
-                <input type="checkbox" name="region[]" value="최신순"id="최신순">
-                <label for="최신순">최신순</label>
+                <input type="radio" name="sort" {% if sort == 'similar' %}checked{% endif %} value="similar"id="similar">
+                <label for="similar">유사도(기본)</label>
+                <input type="radio" name="sort" {% if sort == 'download' %}checked{% endif %} value="download"id="download">
+                <label for="download">다운 많은 순</label><br>
+                <input type="radio" name="sort" {% if sort == 'like' %}checked{% endif %} value="like"id="like">
+                <label for="like">좋아요 많은 순</label><br>
+                <input type="radio" name="sort" {% if sort == 'recent' %}checked{% endif %} value="recent"id="recent">
+                <label for="recent">최신순</label>
             </form>
         </div>
         <!-- 결과 -->
         <div id='result'>
-            show result
-            <div>
+            <h3>show result </h3>
+            You have searched for : {{ kw }} <br>
+            {% for music in music_list %}
+                <div>
+                    <h4><a href="{% url 'subapp:detail' %}">{{music.fname}}</a></h4>
+                    category : {{music.label}} | license : {{music.licenses}} <br>
+                    <audio src='/music_sample/{{music.fname}}' controls>해당 브라우저는 오디오태그를 지원하지 않습니다.</audio>
+                    <!-- C:\Users\26162\TeamProject\Aloha\Ai_Dolphin\ai-dolphin\web\dolphinProject\music_sample -->
+                </div>
+            {% empty %}
+                <div>
+                    0 result found.
+                </div>
+            {% endfor %}
+            <!-- <div>
                 <h4>file name</h4>
                 <audio src='music/00c9e799.wav' controls></audio>
-            </div>
-            <div>
-                <h4>file name</h4>
-                <audio src='music/00c9e799.wav' controls></audio>
-            </div>
-            <div>
-                <h4>file name</h4>
-                <audio src='music/00c9e799.wav' controls></audio>
-            </div>
+            </div> -->
         </div>
     </div>
 {% endblock %}

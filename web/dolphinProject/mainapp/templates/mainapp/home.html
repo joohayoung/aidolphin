@@ -11,13 +11,20 @@
     </div>
     <!-- 키워드 검색 -->
     <div class="search">
-        <input type="text" class="search-input" placeholder="search...">
-        <a href="#" class="search-icon">
-            <img src="{% static 'image/white_search@0.5x.png' %}" alt='search icon'>
-        </a>
+        <form action="{% url 'mainapp:search' %}" method="GET">
+            {% csrf_token %}
+            <input type="text" class="search-input" placeholder="search..." name="kw">
+            <button type="submit">
+                <img src="{% static 'image/white_search@0.5x.png' %}" alt='search icon'>
+            </button>
+            <!-- <a href="#" class="search-icon">
+                <img src="{% static 'image/white_search@0.5x.png' %}" alt='search icon'>
+            </a> -->
+        </form>
     </div>
     <!-- 실시간검색 -->
     <div>
+        <h3>실시간 검색 기능</h3>
         녹음버튼
         종료버튼
         분석
@@ -26,6 +33,7 @@
     </div>
     <!-- 파일검색 -->
     <div>
+        <h3>파일 검색기능</h3>
         파일업로드
         분석하기
     </div>
