@@ -31,7 +31,7 @@ def search(request):
         if kw != '' :
             music_list = music_list.filter(
                 Q(fname__contains=kw) | Q(label__contains=kw)
-            ).distinct()
+            )#.distinct()
 
         ## 라이센스 필터링
         licenses = request.GET.getlist('license[]', 'all')
@@ -42,42 +42,29 @@ def search(request):
             context['music_list'] = music_list
         else:
             context['license'] = licenses
-            # BY Attribution
-            # NC Noncommercial
-            # ND (No)Derivative Works
-            # SA Share-Alike
-            # CC0 Creative Commons 0
+            # author commercial work
+            if 'author' in licenses:
+                #저작자 표기안함 : cc0
+                music_list = music_list.filter(licenses='CreativeCommons0')
+            
+            if 'commercial' in licenses:
+                # 상업적 이용가능 : cc0 / by-nb / by-sa / by
+                # by-nc / by-nc-sa / by-nc-nd
+                music_list = music_list.exclude(licenses__contains='Noncommercial')
+                # music_list = music_list.filter(
+                #     Q(licenses='CreativeCommons0')|
+                #     Q(licenses='Attribution Derivative Works')|
+                #     Q(licenses='Attribution Share-alike')|
+                #     Q(licenses='Attribution')
+                # )
 
-            ### licenses = [CC0 BY NC]
-            q=['','','','','']
-            if 'CC0' in licenses:
-                q[0]='CreativeCommons0'
-            else : q[0]='nonono'#없을것 임의로 임력
+            if 'work' in licenses:
+                # 변경가능 : cc0 / by-nc / by-sa / by-nc-sa / by
+                # 변경불가능 : by-nd / by-nc-nd
+                music_list = music_list.exclude(
+                    licenses__contains='Derivative Works'   
+                )
 
-            if 'BY' in licenses:
-                q[1]='Attribution'
-            else: q[1]='nonono'
+            context['music_list'] = music_list
 
-            if 'NC' in licenses:
-                q[2]='Noncommercial'
-            else: q[2]='nonono'
-
-            if 'ND' in licenses:
-                q[3]='DerivativeWorks'
-            else: q[3]='nonono'
-
-            if 'SA' in licenses:
-                q[4]='Share-Alike'
-            else: q[4]='nonono'
-
-            print(q)
-            context['music_list'] = music_list.filter(
-                Q(licenses__contains=q[0])|
-                Q(licenses__contains=q[1])|
-                Q(licenses__contains=q[2])|
-                Q(licenses__contains=q[3])|
-                Q(licenses__contains=q[4])
-            ).distinct()
-
-    #context['license']='temp'
     return render(request, 'mainapp/search.html', context)
