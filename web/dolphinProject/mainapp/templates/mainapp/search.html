@@ -12,7 +12,7 @@
             <form action="{% url 'mainapp:search' %}" method="GET" name="option">
                 {% csrf_token %}
                 <h3>상세조건</h3>
-                저작권 : 
+                저작권 :
                 {% if license == 'all' %}
                     all<br>
                 {% else %}
