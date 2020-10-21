@@ -22,22 +22,18 @@
                 </div>
 
                 <h4>저작권</h4>
-                <input type="checkbox" name="license[]" value="전체"id="전체">
-                <label for="전체_cate">전체</label>
-                <br>
-                <input type="checkbox" name="license[]" value="100% free"id="100% free">
-                <label for="100% free">100% free</label>                    <br>
-                <input type="checkbox" name="license[]" value="free_for_personal_use"id="free_for_personal_use">
-                <label for="free_for_personal_use">free_for_personal_use</label>
-                <br>
-                <input type="checkbox" name="license[]" value="donationware"id="donationware">
-                <label for="donationware">donationware</label>                    <br>
-                <input type="checkbox" name="license[]" value="shareware"id="shareware">
-                <label for="shareware">shareware</label>
-                <br>
-                <input type="checkbox" name="license[]" value="demo"id="demo">
-                <label for="demo">demo</label>
-
+                <input type="checkbox" name="license[]" value="all"id="all" {% if license == 'all' %}checked{% endif %} >
+                <label for="all">전체</label><br>
+                <input type="checkbox" name="license[]" value="CC0"id="CC0"{% if 'CC0' in license %}checked{% endif %}>
+                <label for="CC0">Creative Commons 0</label><br>
+                <input type="checkbox" name="license[]" value="BY"id="BY"{% if 'BY' in license %}checked{% endif %}>
+                <label for="BY">Attribution (BY)</label><br>
+                <input type="checkbox" name="license[]" value="NC"id="NC"{% if 'NC' in license %}checked{% endif %}>
+                <label for="NC">Noncommercial (NC)</label><br>
+                <input type="checkbox" name="license[]" value="ND"id="ND"{% if 'ND' in license %}checked{% endif %}>
+                <label for="ND">No Derivative Works (ND)</label><br>
+                <input type="checkbox" name="license[]" value="SA"id="SA"{% if 'SA' in license %}checked{% endif %}>
+                <label for="SA">Sare-alike (SA)</label><br>
                     
                 <h4>정렬기준</h4>
                 <input type="radio" name="sort" {% if sort == 'similar' %}checked{% endif %} value="similar"id="similar">
@@ -57,7 +53,10 @@
             {% for music in music_list %}
                 <div>
                     <h4><a href="{% url 'subapp:detail' %}">{{music.fname}}</a></h4>
+                    <!-- 확인용으로 정보 다 집어넣음 나중에 생략할거 생략하기 -->
                     category : {{music.label}} | license : {{music.licenses}} <br>
+                    like : {{music.like.count}} | download : {{music.downloads}} <br>
+                    date : {{music.date}} <br>
                     <audio src='/music_sample/{{music.fname}}' controls>해당 브라우저는 오디오태그를 지원하지 않습니다.</audio>
                     <!-- C:\Users\26162\TeamProject\Aloha\Ai_Dolphin\ai-dolphin\web\dolphinProject\music_sample -->
                 </div>

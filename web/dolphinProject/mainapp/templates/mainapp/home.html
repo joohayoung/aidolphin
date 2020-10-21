@@ -20,6 +20,7 @@
             <form action="{% url 'mainapp:search' %}" method="GET">
                 {% csrf_token %}
                 <input type="text" class="search-input" placeholder="search..." name="kw">
+                <input type="hidden" name='licenses[]' value="{{'all'}}">
                 <button type="submit" class="search-icon">
                     <img src="{% static 'image/white_search@0.5x.png' %}" alt='search icon'>
                 </button>
