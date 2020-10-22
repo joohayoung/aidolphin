@@ -8,63 +8,80 @@ def home(request):
 
 def search(request):
     context = {}
+    audio = None
+    label = None
 
-    if request.method == "GET":
-        ## 정렬하기
-        sort = request.GET.get('sort', 'like') #나중에 기본설정 similar로 바꾸기
-        context['sort'] = sort
+    ####파일검색
+    if request.method=='POST':
+        if 'file' in request.FILES:
+            audio = request.FILES['file']
+            context['audio'] = audio
+            # audio 파일을 모델 함수에 입력 아웃풋 lagel값
+            label = 'Telephone' #function(audio)
+            context['label'] = label
+    else:
+        label = request.GET.get('label', '')
+        context['label'] = label
+        audio = request.GET.get('audio', '')
+        context['audio'] = audio
 
-        if sort == 'like': #좋아요순
-            music_list = MusicDB.objects.annotate(num_like=Count('like')).order_by('-num_like','-date')
-        elif sort == 'download': #다운로드순
-            music_list = MusicDB.objects.order_by('-downloads', '-date')
-        elif sort == 'similar': #유사도(기본)
-            #유사도 추가하기
-            pass
-        else: #recent 최신순
-            music_list = MusicDB.objects.order_by('-date')
 
-        ## 검색결과
-        kw = request.GET.get('kw', '')
-        context['kw'] = kw
+# if request.method == "GET"
+    ## DB 불러와서 정렬하기
+    sort = request.GET.get('sort', 'like') #나중에 기본설정 similar로 바꾸기
+    context['sort'] = sort
 
-        if kw != '' :
-            music_list = music_list.filter(
-                Q(fname__contains=kw) | Q(label__contains=kw)
-            )#.distinct()
+    if sort == 'like': #좋아요순
+        music_list = MusicDB.objects.annotate(num_like=Count('like')).order_by('-num_like','-date')
+    elif sort == 'download': #다운로드순
+        music_list = MusicDB.objects.order_by('-downloads', '-date')
+    elif sort == 'similar': #유사도(기본)
+        #유사도 추가하기
+        pass
+    else: #recent 최신순
+        music_list = MusicDB.objects.order_by('-date')
 
-        ## 라이센스 필터링
-        licenses = request.GET.getlist('license[]', 'all')
-        print(licenses)
-        if 'all' in licenses:
-            #all 이 같이 입력되거나 아무것도 입력되지 않았을때
-            context['license']='all'
-            context['music_list'] = music_list
-        else:
-            context['license'] = licenses
-            # author commercial work
-            if 'author' in licenses:
-                #저작자 표기안함 : cc0
-                music_list = music_list.filter(licenses='CreativeCommons0')
-            
-            if 'commercial' in licenses:
-                # 상업적 이용가능 : cc0 / by-nb / by-sa / by
-                # by-nc / by-nc-sa / by-nc-nd
-                music_list = music_list.exclude(licenses__contains='Noncommercial')
-                # music_list = music_list.filter(
-                #     Q(licenses='CreativeCommons0')|
-                #     Q(licenses='Attribution Derivative Works')|
-                #     Q(licenses='Attribution Share-alike')|
-                #     Q(licenses='Attribution')
-                # )
+    ## 검색결과
+    kw = request.GET.get('kw', '')
+    context['kw'] = kw
 
-            if 'work' in licenses:
-                # 변경가능 : cc0 / by-nc / by-sa / by-nc-sa / by
-                # 변경불가능 : by-nd / by-nc-nd
-                music_list = music_list.exclude(
-                    licenses__contains='Derivative Works'   
-                )
+    if label: #키워드 검색이 아니고 파일검색에서 라벨을 입력(?)받았을때
+        kw = label 
 
-            context['music_list'] = music_list
+    if kw != '' : # 키워드 검색 파일명이나 라벨명으로 검색
+        music_list = music_list.filter(
+            Q(fname__contains=kw) | Q(label__contains=kw)
+        )#.distinct()
+    elif label: #kw가 ''인데 label 값이 있을경우 label로 검색
+        music_list = music_list.filter(label__contains=label)#.distinct()
+    else:
+        #kw가 ''이고 label값도 없을경우 => 키워드검색, 키워드 입력안함 => 전체 
+        pass
+
+    ## 라이센스 필터링
+    licenses = request.GET.getlist('license[]', 'all')
+    print(licenses)
+    if 'all' in licenses:
+        #all 이 같이 입력되거나 아무것도 입력되지 않았을때
+        context['license']='all'
+        context['music_list'] = music_list
+    else:
+        context['license'] = licenses
+        # author commercial work
+        if 'author' in licenses:
+            #저작자 표기안함 : cc0
+            music_list = music_list.filter(licenses='CreativeCommons0')
+        
+        if 'commercial' in licenses:
+            # 상업적 이용가능 : cc0 / by-nb / by-sa / by
+            # by-nc / by-nc-sa / by-nc-nd
+            music_list = music_list.exclude(licenses__contains='Noncommercial')
+
+        if 'work' in licenses:
+            # 변경가능 : cc0 / by-nc / by-sa / by-nc-sa / by
+            # 변경불가능 : by-nd / by-nc-nd
+            music_list = music_list.exclude(licenses__contains='Derivative Works')
+
+        context['music_list'] = music_list
 
     return render(request, 'mainapp/search.html', context)

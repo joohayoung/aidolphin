@@ -19,7 +19,7 @@
         <div class="search">
             <form action="{% url 'mainapp:search' %}" method="GET">
                 {% csrf_token %}
-                <input type="text" class="search-input" placeholder="search..." name="kw">
+                <input type="text" class="search-input" placeholder="search..." name="kw" value="{{kw|default_if_none:''}}">
                 <input type="hidden" name='licenses[]' value="{{'all'}}">
                 <button type="submit" class="search-icon">
                     <img src="{% static 'image/white_search@0.5x.png' %}" alt='search icon'>
@@ -143,9 +143,10 @@
         </div>
         <!-- 파일검색 -->
         <div id='file'>
-            <form>
-                <input type="file" name="file" id="file" class="inputfile" accept="audio/*" capture="microphone" required/>
-                <label for="file"><strong>Choose a file</strong></label>
+            <form method="POST" action="{% url 'mainapp:search' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="file" name="file" id="file_box" class="inputfile" accept="audio/*" capture="microphone" required/>
+                <label for="file_box"><strong>Choose a file</strong></label>
                 <input type="submit">
             </form>
         </div>
