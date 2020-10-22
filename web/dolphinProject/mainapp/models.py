@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+import os
+from django.conf import settings
 # Create your models here.
 
 class MusicDB(models.Model):
@@ -19,3 +21,9 @@ class UploadMusicDB(models.Model):
 
     def __str__(self):
         return f'{self.id}: {self.audio}'
+
+    def delete(self, *args, **kwargs):
+        #media>upload_music 자동삭제
+        super(UploadMusicDB, self).delete(*args, **kwargs)
+        os.remove(os.path.join(settings.MEDIA_ROOT, self.audio.path))
+

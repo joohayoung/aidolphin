@@ -26,8 +26,7 @@ def search(request):
             label = label_type(file_path)#'Telephone' #label_type(audio경로)
             context['label'] = label
 
-            uploadfile.delete()# DB 목록에서는사라지는데 파일에서는 안사라짐
-            # post = Post.objects.get(id=post_id, user=request.user)
+            uploadfile.delete()#
     else:
         label = request.GET.get('label', '')
         context['label'] = label
