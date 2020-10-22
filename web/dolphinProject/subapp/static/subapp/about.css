@@ -1,0 +1,14 @@
+#title{
+    text-align: center;
+}
+#info{
+    color: white;
+    text-align: center;
+    padding-top: 453px;
+    padding-bottom: 453px;
+}
+
+#info_img{
+    position: absolute;
+    z-index: -1;
+}
