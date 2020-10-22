@@ -12,3 +12,10 @@ class MusicDB(models.Model):
 
     def __str__(self):
         return f'{self.id}: {self.fname}'
+
+class UploadMusicDB(models.Model):
+    audio = models.FileField(upload_to='upload_music')
+    # audio = models.FileField(blank=True, upload_to='upload_music/%Y/%m/%d')
+
+    def __str__(self):
+        return f'{self.id}: {self.audio}'
