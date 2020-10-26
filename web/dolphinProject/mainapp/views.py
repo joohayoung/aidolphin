@@ -1,8 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import MusicDB, UploadMusicDB
 from django.db.models import Q, Count
-from model.type_predictor import label_type
-#\dolphinProject\model\type_predictor.py
+# from model.type_predictor import label_type
+
 # Create your views here.
 
 def home(request):
@@ -23,10 +23,10 @@ def search(request):
             context['audio'] = audio
             # audio 파일을 모델 함수에 입력 아웃풋 lagel값
             file_path = f"media/upload_music/{audio}"
-            label = label_type(file_path)#'Telephone' #label_type(audio경로)
+            # label = label_type(file_path) # 모델활용
+            label = 'Telephone' #확인용
             context['label'] = label
-
-            uploadfile.delete()#
+            uploadfile.delete()
     else:
         label = request.GET.get('label', '')
         context['label'] = label

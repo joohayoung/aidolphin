@@ -10,12 +10,12 @@
         <img class='banner_img' src="{% static 'mainapp/image/banner3.png' %}" alt='banner'>
     </div>
     <div id='home_container'>
-        <!-- 키워드 검색 -->
         <div id='banner_text'>
             Ai Dolphin<br>
             가장 빠르고 정확한 음향 분석과 검색 Ai<br>
             이제 음향은 dolphin으로!
         </div>
+        <!-- 키워드 검색 -->
         <div class="search">
             <form action="{% url 'mainapp:search' %}" method="GET">
                 {% csrf_token %}
@@ -31,115 +31,159 @@
             <input type=checkbox id="chk-hear-mic"><label for="chk-hear-mic">마이크 소리 듣기</label>
             <button id="record">녹음</button>
             <button id="stop">정지</button>
-            <div id="sound-clips"></div>
+            <div id="sound-clips">
+                <a id="resp">분석</a>
+            </div>
             <script>
-                const record = document.getElementById("record")
-                const stop = document.getElementById("stop")
-                const soundClips = document.getElementById("sound-clips")
-                const chkHearMic = document.getElementById("chk-hear-mic")
+                const record = document.getElementById("record");
+                const stop = document.getElementById("stop");
+                const soundClips = document.getElementById("sound-clips");
+                const chkHearMic = document.getElementById("chk-hear-mic");
+                const resp = document.getElementById("resp")
 
-                const audioCtx = new(window.AudioContext || window.webkitAudioContext)() // 오디오 컨텍스트 정의
+                const audioCtx = new(window.AudioContext || window.webkitAudioContext)(); // 오디오 컨텍스트 정의
 
-                const analyser = audioCtx.createAnalyser()
+                const analyser = audioCtx.createAnalyser();
                 //        const distortion = audioCtx.createWaveShaper()
                 //        const gainNode = audioCtx.createGain()
                 //        const biquadFilter = audioCtx.createBiquadFilter()
 
                 function makeSound(stream) {
-                    const source = audioCtx.createMediaStreamSource(stream)
+                    const source = audioCtx.createMediaStreamSource(stream);
 
-                    source.connect(analyser)
+                    source.connect(analyser);
                     //            analyser.connect(distortion)
                     //            distortion.connect(biquadFilter)
                     //            biquadFilter.connect(gainNode)
                     //            gainNode.connect(audioCtx.destination) // connecting the different audio graph nodes together
-                    analyser.connect(audioCtx.destination)
+                    analyser.connect(audioCtx.destination);
 
+                };
+
+                function getCookie(cname) {
+                    var name = cname + "=";
+                    var ca = document.cookie.split(';');
+                    for(var i = 0; i <ca.length; i++) {
+                        var c = ca[i];
+                        while (c.charAt(0)==' ') {
+                            c = c.substring(1);
+                        }
+                        if (c.indexOf(name) == 0) {
+                            return c.substring(name.length,c.length);
+                        }
+                    }
+                    return "";
                 }
+                // ======= 사용할 변수 함수 정의 =========
 
                 if (navigator.mediaDevices) {
-                    console.log('getUserMedia supported.')
+                    console.log('getUserMedia supported.'); //웹 콘솔창에 표시
 
                     const constraints = {
                         audio: true
-                    }
-                    let chunks = []
+                    };
+                    let chunks = [];
 
                     navigator.mediaDevices.getUserMedia(constraints)
                         .then(stream => {
 
-                            const mediaRecorder = new MediaRecorder(stream)
+                            const mediaRecorder = new MediaRecorder(stream);
                             
-                            chkHearMic.onchange = e => {
+                            chkHearMic.onchange = e => { // 마이크 소리듣기 옵션
                                 if(e.target.checked == true) {
-                                    audioCtx.resume()
-                                    makeSound(stream)
+                                    audioCtx.resume();
+                                    makeSound(stream);
                                 } else {
-                                    audioCtx.suspend()
-                                }
-                            }
+                                    audioCtx.suspend();
+                                };
+                            };
                             
-                            record.onclick = () => {
-                                mediaRecorder.start()
-                                console.log(mediaRecorder.state)
-                                console.log("recorder started")
-                                record.style.background = "red"
-                                record.style.color = "black"
-                            }
+                            record.onclick = () => { //녹음버튼누르면 녹음시작
+                                mediaRecorder.start();
+                                console.log(mediaRecorder.state);
+                                console.log("recorder started");
+                                record.style.background = "red";
+                                record.style.color = "black";
+                            };
 
-                            stop.onclick = () => {
-                                mediaRecorder.stop()
-                                console.log(mediaRecorder.state)
-                                console.log("recorder stopped")
-                                record.style.background = ""
-                                record.style.color = ""
-                            }
+                            stop.onclick = () => { //stop버튼 무르면 중지
+                                mediaRecorder.stop();
+                                console.log(mediaRecorder.state);
+                                console.log("recorder stopped");
+                                record.style.background = "";
+                                record.style.color = "";
+                            };
 
-                            mediaRecorder.onstop = e => {
-                                console.log("data available after MediaRecorder.stop() called.")
+                            mediaRecorder.onstop = e => { //mediaRecorder가 stop 상태가 되면 (stop 버튼 누르면)
+                                console.log("data available after MediaRecorder.stop() called.");
 
-                                const clipName = prompt("오디오 파일 제목을 입력하세요.", new Date())
+                                const clipName = prompt("오디오 파일 제목을 입력하세요.", new Date()); //이름지정안하면 날짜로 기본설정
 
-                                const clipContainer = document.createElement('article')
-                                const clipLabel = document.createElement('p')
-                                const audio = document.createElement('audio')
-                                const deleteButton = document.createElement('button')
+                                const clipContainer = document.createElement('article');
+                                const clipLabel = document.createElement('p');
+                                const audio = document.createElement('audio');
+                                const deleteButton = document.createElement('button');
+                                const submitButton = document.createElement('button'); //제출버튼 추가
 
-                                clipContainer.classList.add('clip')
-                                audio.setAttribute('controls', '')
-                                deleteButton.innerHTML = "삭제"
-                                clipLabel.innerHTML = clipName
+                                clipContainer.classList.add('clip');
+                                audio.setAttribute('controls', '');
+                                deleteButton.innerHTML = "삭제";
+                                submitButton.innerHTML = "제출";
+                                clipLabel.innerHTML = clipName;
+                                submitButton.setAttribute('type', 'submit')//제출버튼 속성추가
 
-                                clipContainer.appendChild(audio)
-                                clipContainer.appendChild(clipLabel)
-                                clipContainer.appendChild(deleteButton)
-                                soundClips.appendChild(clipContainer)
+                                clipContainer.appendChild(audio);
+                                clipContainer.appendChild(clipLabel);
+                                clipContainer.appendChild(deleteButton);
+                                clipContainer.appendChild(submitButton);//제출버튼 clipcontainer에 추가
+                                soundClips.appendChild(clipContainer);
 
-                                audio.controls = true
-                                const blob = new Blob(chunks, {
-                                    'type': 'audio/ogg codecs=opus'
-                                })
-                                chunks = []
-                                const audioURL = URL.createObjectURL(blob)
-                                audio.src = audioURL
-                                console.log("recorder stopped")
+                                audio.controls = true;
+                                const blob = new Blob(chunks, {'type': 'audio/ogg codecs=opus'});
+                                
+                                chunks = [];
+                                const audioURL = URL.createObjectURL(blob);
+                                audio.src = audioURL;
+                                console.log("recorder stopped");
 
                                 deleteButton.onclick = e => {
-                                    evtTgt = e.target
-                                    evtTgt.parentNode.parentNode.removeChild(evtTgt.parentNode)
-                                }
-                            }
+                                    evtTgt = e.target;
+                                    evtTgt.parentNode.parentNode.removeChild(evtTgt.parentNode);
+                                };
+
+                                submitButton.onclick = () => { 
+                                    //추가
+                                    const fd = new FormData;
+                                    fd.append('file', blob, clipName+".wav");
+
+                                    var headers = new Headers();
+                                    var csrftoken = getCookie('csrftoken');
+                                    headers.append('X-CSRFToken', csrftoken);
+
+                                    const response = fetch("{% url 'mainapp:search' %}", {method:"POST", headers:headers, redirect:'follow', body:fd})
+                                    .then(response => console.log(response.ok)) // .status : http 상태코드(ex>200) .ok : boolean값 상태코드가 200-299사이일때 true
+                                    .catch(err=> console.error(err));
+
+                                    resp.setAttribute('href', response.url);//분석버튼 속성추가
+                                    //추가끝
+                                    // console.log(response)
+                                    // return window.location.href = response.url;
+                                    // return response.redirect(response.url);
+                                    // return $http.post(response)
+                                    // return response.render();
+                                };
+
+                            };
 
                             mediaRecorder.ondataavailable = e => {
-                                chunks.push(e.data)
-                            }
+                                chunks.push(e.data);
+                            };
                         })
                         .catch(err => {
-                            console.log('The following error occurred: ' + err)
+                            console.log('The following error occurred: ' + err);
                         })
-                }
+                };
             </script>
-            분석 /
         </div>
         <!-- 파일검색 -->
         <div id='file'>
