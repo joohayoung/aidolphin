@@ -27,8 +27,6 @@
                     <button id='option_bt' type="reset">초기화</button>
                     <button id='option_bt' type="submit">적용</button>
                     <input type="hidden" name='kw' value="{{ kw|default_if_none:'' }}">
-                    <input type="hidden" name='label' value="{{ label|default_if_none:'' }}">
-                    <input type="hidden" name='audio' value="{{ audio|default_if_none:'' }}">
                 </div>
 
                 <h4>저작권</h4>
@@ -55,30 +53,27 @@
         <!-- 결과 -->
         <div id='result'>
             <h3>show result </h3>
-            <p>
-                {% if label %}
-                입력파일명 : {{audio}}<br>
-                분석결과 : {{label}}<br>
-                파형 : (예시.png 또는 그래프 추가 등...)<br>
-                {% else %}
-                You have searched for : {{ kw }}<br>
-                {% endif %}
-            </p>
-            <!-- 음향리스트 -->
+            You have searched for : {{ kw }} <br>
             {% for music in music_list %}
                 <div>
-                    <h4><a href="{% url 'subapp:detail' %}">{{music.fname}}</a></h4>
+                    <h4><a href="{{music.pk}}">{{music.fname}}</a></h4>
                     <!-- 확인용으로 정보 다 집어넣음 나중에 생략할거 생략하기 -->
                     category : {{music.label}} | license : {{music.licenses}} <br>
                     like : {{music.like.count}} | download : {{music.downloads}} <br>
                     date : {{music.date}} <br>
-                    <audio src='/media/music_sample/{{music.fname}}' controls>해당 브라우저는 오디오 태그를 지원하지 않습니다.</audio>
+                    user : {{music.user}} <br>
+                    <audio src='/music_sample/{{music.fname}}' controls>해당 브라우저는 오디오태그를 지원하지 않습니다.</audio>
+                    <!-- C:\Users\26162\TeamProject\Aloha\Ai_Dolphin\ai-dolphin\web\dolphinProject\music_sample -->
                 </div>
             {% empty %}
                 <div>
                     0 result found.
                 </div>
             {% endfor %}
+            <!-- <div>
+                <h4>file name</h4>
+                <audio src='music/00c9e799.wav' controls></audio>
+            </div> -->
         </div>
     </div>
 {% endblock %}

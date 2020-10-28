@@ -1,1 +1,0 @@
-moduleName = 'model.modelsub.config'
