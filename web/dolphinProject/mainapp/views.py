@@ -1,12 +1,39 @@
 from django.shortcuts import render, redirect
 from .models import MusicDB, UploadMusicDB
 from django.db.models import Q, Count
-# from model.type_predictor import label_type
+from django.http import HttpResponse
+import json
+from model.type_predictor import label_type
 
 # Create your views here.
 
 def home(request):
     return render(request, 'mainapp/home.html')
+
+def realtime(request):
+    context = {}
+    if request.method=='POST':
+        if 'file' in request.FILES:
+            audio = request.FILES['file']
+            uploadfile = UploadMusicDB(audio=audio)
+            uploadfile.save()
+            context['audio'] = audio.name
+            print('views.py realtime audioname : ', audio.name)
+            # audio 파일을 모델 함수에 입력 아웃풋 lagel값
+            file_path = f"media/upload_music/{audio}"
+            label = label_type(file_path) # 모델활용
+            # label = 'Telephone' #확인용
+            context['label'] = label
+            print('views.py realtime label : ', label)
+            uploadfile.delete()
+        else:
+            context['audio'] = 'audio_none'
+            context['label'] = 'label_none'
+    else:
+        context['audio'] = 'audio_none'
+        context['label'] = 'label_none'
+
+    return HttpResponse(json.dumps(context))
 
 def search(request):
     context = {}

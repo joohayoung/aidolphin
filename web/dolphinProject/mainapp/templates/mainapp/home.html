@@ -32,35 +32,33 @@
             <button id="record">녹음</button>
             <button id="stop">정지</button>
             <div id="sound-clips">
-                <a id="resp">분석</a>
+                <form action="{% url 'mainapp:search' %}" method="GET">
+                    {% csrf_token %}
+                    <input type="hidden" name='licenses[]' value="{{'all'}}">
+                    <input type="hidden" name='label' id='label_input'>
+                    <input type="hidden" name='audio' id='audio_input'>
+                    <button type="submit" id='realtime_search' style="display: none;">
+                        search페이지로 넘어가는 제출(검색?)
+                    </button>
+                </form>
             </div>
             <script>
                 const record = document.getElementById("record");
                 const stop = document.getElementById("stop");
                 const soundClips = document.getElementById("sound-clips");
                 const chkHearMic = document.getElementById("chk-hear-mic");
-                const resp = document.getElementById("resp")
 
                 const audioCtx = new(window.AudioContext || window.webkitAudioContext)(); // 오디오 컨텍스트 정의
-
-                const analyser = audioCtx.createAnalyser();
-                //        const distortion = audioCtx.createWaveShaper()
-                //        const gainNode = audioCtx.createGain()
-                //        const biquadFilter = audioCtx.createBiquadFilter()
+                const analyser = audioCtx.createAnalyser()
 
                 function makeSound(stream) {
                     const source = audioCtx.createMediaStreamSource(stream);
 
                     source.connect(analyser);
-                    //            analyser.connect(distortion)
-                    //            distortion.connect(biquadFilter)
-                    //            biquadFilter.connect(gainNode)
-                    //            gainNode.connect(audioCtx.destination) // connecting the different audio graph nodes together
                     analyser.connect(audioCtx.destination);
-
                 };
 
-                function getCookie(cname) {
+                function getCookie(cname) { //csrf_token 가져오는 용도
                     var name = cname + "=";
                     var ca = document.cookie.split(';');
                     for(var i = 0; i <ca.length; i++) {
@@ -78,7 +76,6 @@
 
                 if (navigator.mediaDevices) {
                     console.log('getUserMedia supported.'); //웹 콘솔창에 표시
-
                     const constraints = {
                         audio: true
                     };
@@ -117,7 +114,8 @@
                             mediaRecorder.onstop = e => { //mediaRecorder가 stop 상태가 되면 (stop 버튼 누르면)
                                 console.log("data available after MediaRecorder.stop() called.");
 
-                                const clipName = prompt("오디오 파일 제목을 입력하세요.", new Date()); //이름지정안하면 날짜로 기본설정
+                                // const clipName = prompt("오디오 파일 제목을 입력하세요.", new Date()); //이름지정안하면 날짜로 기본설정
+                                const clipName = prompt("오디오 파일 제목을 입력하세요.", 'default'); // 날짜 형식오류나서 문자열로 변경
 
                                 const clipContainer = document.createElement('article');
                                 const clipLabel = document.createElement('p');
@@ -128,7 +126,7 @@
                                 clipContainer.classList.add('clip');
                                 audio.setAttribute('controls', '');
                                 deleteButton.innerHTML = "삭제";
-                                submitButton.innerHTML = "제출";
+                                submitButton.innerHTML = "확인(등록?)적당한 이름짓기";
                                 clipLabel.innerHTML = clipName;
                                 submitButton.setAttribute('type', 'submit')//제출버튼 속성추가
 
@@ -152,7 +150,9 @@
                                 };
 
                                 submitButton.onclick = () => { 
-                                    //추가
+                                    submitButton.innerHTML = "등록중";
+                                    submitButton.setAttribute('disabled', 'disabled')
+
                                     const fd = new FormData;
                                     fd.append('file', blob, clipName+".wav");
 
@@ -160,17 +160,21 @@
                                     var csrftoken = getCookie('csrftoken');
                                     headers.append('X-CSRFToken', csrftoken);
 
-                                    const response = fetch("{% url 'mainapp:search' %}", {method:"POST", headers:headers, redirect:'follow', body:fd})
-                                    .then(response => console.log(response.ok)) // .status : http 상태코드(ex>200) .ok : boolean값 상태코드가 200-299사이일때 true
-                                    .catch(err=> console.error(err));
+                                    const audioinput = document.getElementById("audio_input");
+                                    const labelinput = document.getElementById("label_input");
 
-                                    resp.setAttribute('href', response.url);//분석버튼 속성추가
-                                    //추가끝
-                                    // console.log(response)
-                                    // return window.location.href = response.url;
-                                    // return response.redirect(response.url);
-                                    // return $http.post(response)
-                                    // return response.render();
+                                    const response = fetch("{% url 'mainapp:realtime' %}", {method:"POST", headers:headers, redirect:'follow', body:fd})
+                                    .then(response => response.json())
+                                    .then(function(res){
+                                        console.log(res)
+                                        audioinput.setAttribute('value', res['audio']);
+                                        labelinput.setAttribute('value', res['label']);
+                                    })
+                                    .then(function(){
+                                        const realtime_search = document.getElementById("realtime_search");
+                                        realtime_search.style.display = "block";
+                                    })
+                                    .catch(err=> console.error(err));
                                 };
 
                             };
