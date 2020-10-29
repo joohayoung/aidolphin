@@ -3,7 +3,7 @@ from .models import MusicDB, UploadMusicDB
 from django.db.models import Q, Count
 from django.http import HttpResponse
 import json
-from model.type_predictor import label_type
+# from model.type_predictor import label_type
 
 # Create your views here.
 
@@ -21,8 +21,8 @@ def realtime(request):
             print('views.py realtime audioname : ', audio.name)
             # audio 파일을 모델 함수에 입력 아웃풋 lagel값
             file_path = f"media/upload_music/{audio}"
-            label = label_type(file_path) # 모델활용
-            # label = 'Telephone' #확인용
+            # label = label_type(file_path) # 모델활용
+            label = 'Telephone' #확인용
             context['label'] = label
             print('views.py realtime label : ', label)
             uploadfile.delete()
@@ -50,8 +50,8 @@ def search(request):
             context['audio'] = audio
             # audio 파일을 모델 함수에 입력 아웃풋 lagel값
             file_path = f"media/upload_music/{audio}"
-            label = label_type(file_path) # 모델활용
-            # label = 'Telephone' #확인용
+            # label = label_type(file_path) # 모델활용
+            label = 'Telephone' #확인용
             context['label'] = label
             uploadfile.delete()
     else:

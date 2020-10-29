@@ -4,7 +4,6 @@ from . import views
 app_name = 'subapp'
 urlpatterns = [
     path('about/', views.about, name='about'), #127.0.0.1:8000/subapp/about
-    path('search/<int:MusicDB_id>/', views.detail, name='detail'),
     path('mypage/', views.mypage, name='mypage'),
 
     path('<int:MusicDB_id>/', views.detail, name='detail'),
