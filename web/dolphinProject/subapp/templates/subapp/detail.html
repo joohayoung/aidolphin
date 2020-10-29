@@ -7,42 +7,55 @@
 
 <!-- body 부분에 들어갈 내용 -->
 {% block content %}
-     <h1>{{music.fname}}<h1>
+    <div>
+    {% if messages %}
+        {% for message in messages %}
+        <!--잘못된 수정 접근시 에러알림 거의 나올일이 없을 것 같다.-->
+        {{message.tags}} : {{message.message}}
+        {% endfor %}
+    {% endif %}
+    </div>
+     <h1>{{music.fname}}</h1>
      <audio src='/music_sample/{{music.fname}}' controls>해당 브라우저는 오디오태그를 지원하지 않습니다.</audio>
-    <div id='container'>
+    <div>
         <div>
             sound wave img 
-        </div>
+        </div><br>
         <div id='uploader'>
             uploader information<br>
             <!--<img src="{% static 'image/userprofile.png' %}">-->
-            uploader name : {{music.user}}<br>
-        </div>
-        <div id='uploader'>
-                fname: {{music.fname}} <br>
-                author:{% if music.author %}<a href="">{{music.author}}</a>{% else %}unknouwn{% endif %} <br> <!--마이페이지(업로더페이지)링크 달기-->
-                label: {{music.label}} <br>
-                licenses: {{music.licenses}} <br>
-                date: {{music.date}} <br>
-                    {% if request.user in music.like.all %}
-                        <a href="{% url 'subapp:like' music.pk %}">
-                        {% csrf_token %}
-                            <button type="button">취소</button>  &nbsp;
-                        </a>
-                    {% else %}
-                        <a href="{% url 'subapp:like' music.pk %}">
-                        {% csrf_token %}
-                            <button type="button">좋아요</button>  &nbsp;
-                        </a>
-                    {% endif %}
-
-                좋아요: {{ music.like.count }} 명이 좋아합니다. <br>
-                즐겨찾기 <br>
-                다운로드 downloads: {{music.downloads}} <br>
-                공유하기<br>
-
-                <!-- SNS share buttons --> 
-                <div style="width: 100%; text-align: center; margin-bottom: 64px;"> 
+            uploader name : {% if music.author %}<a href="">{{music.author}}</a>{% else %}unknown{% endif %} <br>
+        </div><br>
+        <!--music info-->
+        <div>
+            fname: {{music.fname}} <br>
+            author:{% if music.author %}<a href="">{{music.author}}</a>{% else %}unknown{% endif %} <br> <!--마이페이지(업로더페이지)링크 달기-->
+            label: {{music.label}} <br>
+            licenses: {{music.licenses}} <br>
+            date: {{music.date}} <br>
+            {% if user.is_authenticated %} 
+            <!--사용자가 로그인한 상태에서만 좋아요 버튼이 보인다-->
+                {% if request.user in music.like.all %}
+                    <a href="{% url 'subapp:like' music.pk %}">
+                    {% csrf_token %}
+                    <!--버튼 이름은 좋아요 그대로인데 색깔로 바뀌면 좋겠다ㅎㅎ-->
+                        <button type="button">(좋아요)취소</button>  &nbsp;
+                    </a>
+                {% else %}
+                    <a href="{% url 'subapp:like' music.pk %}">
+                    {% csrf_token %}
+                        <button type="button">좋아요</button>  &nbsp;
+                    </a>
+                {% endif %}
+            {% else %}
+                좋아요: 
+            {% endif %}
+            {{ music.like.count }} 명이 좋아합니다. <br>
+            즐겨찾기 <br>
+            다운로드 downloads: {{music.downloads}} <br>
+            공유하기<br>
+            <!-- SNS share buttons --> 
+            <div style="width: 100%; text-align: center;"> 
                 <!-- Facebook share button --> 
                 <a href="" onclick="window.open(url_combine_fb, '', 'scrollbars=no, width=600, height=600'); return false;">
                 <img src="https://imgur.com/2pxqHxt.png" title="페이스북으로 공유하기" class="sharebtn_custom" style="width: 48px;"></a> 
@@ -55,69 +68,108 @@
                 <!-- Kakao story share button --> 
                 <a href="" onclick="window.open(url_combine_ks, '', 'scrollbars=no, width=600, height=600'); return false;">
                 <img src="https://imgur.com/mIW39pd.jpg" title="카카오스토리로 공유하기" class="sharebtn_custom" style="width: 48px;"></a>
-                </div>
-
-
-            </ul>
+            </div>
         </div>
-    </div>
-    <a href="/search/">목록</a>
+        <!--라이센스 설명부분 위치 재조정하기--><br>
+        <div>
+            <h3><a href="http://ccl.cckorea.org/about/">CCL (Creative Commonss License)</a></h3>
+            <p>CCL은 자신의 창작물에 대하여 일정한 조건 하에 다른 사람이 자유로운 이용을 허락하는 내용의 자유이용 라이선스(License)입니다.</p>
+            <div>
+                {% if music.licenses == "Attribution" %}
+                    <img src="http://www.cckorea.org/images/ccl/lic_by_g.gif" alt="아이콘(CC BY)">
+                    <h5>Attribution (저작자표시 : CC BY)</h5>>
+                    <span>저작자의 이름, 저작물의 제목, 출처 등 저작자에 관한 표시를 해주어야 합니다.</span>
+                {% elif music.licenses == "Attribution Noncommercial" %}
+                    <img src="http://www.cckorea.org/images/ccl/lic_by_nc_g.gif" alt="아이콘(CC BY-NC)">
+                    <h5>Attribution Noncommercial (저작자표시-비영리 : CC BY-NC)</h5>
+                    <span>저작자를 밝히면 자유로운 이용이 가능하지만 영리목적으로 이용할 수 없습니다.</span>
+                {% elif music.licenses == "Attribution Derivative Works" %}
+                    <img src="http://www.cckorea.org/images/ccl/lic_by_nd_g.gif" alt="아이콘(CC BY-ND)">
+                    <h5>Attribution Derivative Works (저작자표시-변경금지 : CC BY-ND)</h5>
+                    <span>저작자를 밝히면 자유로운 이용이 가능하지만, 변경 없이 그대로 이용해야 합니다.</span>
+                {% elif music.licenses == "Attribution Share-alike" %}
+                    <img src="http://www.cckorea.org/images/ccl/lic_by_sa_g.gif" alt="아이콘(CC BY-SA)">
+                    <h5>Attribution Share-alike (저작자표시-동일조건변경허락 : CC BY-SA)</h5>
+                    <span>저작자를 밝히면 자유로운 이용이 가능하고 저작물의 변경도 가능하지만, 2차적 저작물에는 원 저작물에 적용된 것과 동일한 라이선스를 적용해야 합니다.</span>
+                {% elif music.licenses == "ttribution Noncommercial Share-alike" %}
+                    <img src="http://www.cckorea.org/images/ccl/lic_by_nc_sa_g.gif" alt="아이콘(CC BY-NC-SA)">
+                    <h5>Attribution Noncommercial Share-alike (저작자표시-비영리-동일조건변경허락 : CC BY-NC-SA)</h5>
+                    <span>저작자를 밝히면 이용이 가능하며 저작물의 변경도 가능하지만, 영리목적으로 이용할 수 없고 2차적 저작물에는 원 저작물과 동일한 라이선스를 적용해야 합니다.</span>
+                {% elif music.licenses == "Attribution Noncommercial Derivative Works" %}
+                    <img src="http://www.cckorea.org/images/ccl/lic_by_nc_nd_g.gif" alt="아이콘(CC BY-NC-ND)">
+                    <h5>Attribution Noncommercial Derivative Works (저작자표시-비영리-변경금지 : CC BY-NC-ND)</h5>
+                    <span>저작자를 밝히면 자유로운 이용이 가능하지만, 영리목적으로 이용할 수 없고 변경 없이 그대로 이용해야 합니다.</span>
+                {% elif music.licenses == "CreativeCommons0" %}
+                    <img src="//upload.wikimedia.org/wikipedia/commons/thumb/6/69/CC0_button.svg/88px-CC0_button.svg.png" alt="아이콘(CC0)">
+                    <h5>Creative Commons 0 (저작권없음 : CC0)</h5>
+                    <span>영리적인 목적을 포함한 어떤 목적으로든 그리고 어떤 방법으로든 그 저작물을 사용할 수 있습니다.</span>
+                {% else %}
+                    error
+                {% endif %}
+            </div>
+        </div>
+    </div> <!--container end-->
+    <a href="javascript:history.back()">목록(뒤로가기)</a>
 
-<!-- 댓글 입력창 -->
-<h3>댓글 입력</h3>
-<form action="{% url 'subapp:comments_new' music.pk%}" method="POST">
-    {% csrf_token %}
-    {{ comment_form }}
-    <input type ="submit" value="댓글작성">
-</form>
+    <!-- 댓글 입력창 -->
+    <h3>댓글 입력</h3>
+    {% if user.is_authenticated %}
+    <form action="{% url 'subapp:comments_new' music.pk%}" method="POST">
+        {% csrf_token %}
+        {{ comment_form }}
+        <input type ="submit" value="댓글작성">
+    </form>
+    {% else %}
+        로그인 후 댓글 작성이 가능합니다.
+    {% endif %}
 
-<!-- 댓글 목록 -->
-<h3>댓글 목록 ({{ comments|length }})</h3>
+    <!-- 댓글 목록 -->
+    <h3>댓글 목록 ({{ comments|length }})</h3>
 
-<!-- +length, .count 갯수 구하기-->
-<table >
-    {% for comment in comments %}
-    <tr>
-        <th>작성자</th>
-        <th>댓글</th>
-        <th>날짜</th>
-        <th></th>
-    </tr>
-    <tr>
-        <td>{{ comment.author }}</td>
-        <td>{{ comment.text }}</td>
-        <td>{{ comment.date }}</td>
-        <td>
-            <a href="{% url 'subapp:comments_edit' music.pk comment.pk %}">Edit</a>
-            <form action="{% url 'subapp:comments_delete' music.pk comment.pk %}" method = "POST">
-                {% csrf_token %}
-                <input type="submit" value="Delete!">
-            </form>
-        </td>
-    </tr>
-    {% empty %}
-    <tr>
-        작성된 댓글이 없습니다 :(
-    </tr>
-    {% endfor %}
-</table>
-<br>
+    <!-- +length, .count 갯수 구하기-->
+    <table >
+        <tr>
+            <th>작성자</th>
+            <th>댓글</th>
+            <th>날짜</th>
+            <th></th>
+        </tr>
+        {% for comment in comments %}
+        <tr>
+            <td>{% if comment.author %}{{ comment.author }}{% else %}알수없음{% endif %}</td>
+            <td>{{ comment.text }}</td>
+            <td>{{ comment.date }}</td>
+            <td>
+                {% if user.is_authenticated and comment.author.pk == user.pk %}
+                <a href="{% url 'subapp:comments_edit' music.pk comment.pk %}">Edit</a>
+                <form action="{% url 'subapp:comments_delete' music.pk comment.pk %}" method = "POST">
+                    {% csrf_token %}
+                    <input type="submit" value="Delete!" onclick="return confirm('댓글을 삭제하시겠습니까?');">
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            작성된 댓글이 없습니다 :(
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
 
-
-
-<!-- SNS share websites --> 
-<script type="text/javascript" async> 
-var url_default_ks = "https://story.kakao.com/share?url=";
-var url_default_fb = "https://www.facebook.com/sharer/sharer.php?u=";
-var url_default_tw_txt = "https://twitter.com/intent/tweet?text="; 
-var url_default_tw_url = "&url="; 
-var url_default_naver = "http://share.naver.com/web/shareView.nhn?url="; 
-var title_default_naver = "&title="; 
-var url_this_page = location.href; 
-var title_this_page = document.title; 
-var url_combine_ks = url_default_ks + url_this_page; 
-var url_combine_fb = url_default_fb + url_this_page; 
-var url_combine_tw = url_default_tw_txt + document.title + url_default_tw_url + url_this_page; 
-var url_combine_naver = url_default_naver + encodeURI(url_this_page) + title_default_naver + encodeURI(title_this_page); 
-</script>
+    <!-- SNS share websites --> 
+    <script type="text/javascript" async> 
+        var url_default_ks = "https://story.kakao.com/share?url=";
+        var url_default_fb = "https://www.facebook.com/sharer/sharer.php?u=";
+        var url_default_tw_txt = "https://twitter.com/intent/tweet?text="; 
+        var url_default_tw_url = "&url="; 
+        var url_default_naver = "http://share.naver.com/web/shareView.nhn?url="; 
+        var title_default_naver = "&title="; 
+        var url_this_page = location.href; 
+        var title_this_page = document.title; 
+        var url_combine_ks = url_default_ks + url_this_page; 
+        var url_combine_fb = url_default_fb + url_this_page; 
+        var url_combine_tw = url_default_tw_txt + document.title + url_default_tw_url + url_this_page; 
+        var url_combine_naver = url_default_naver + encodeURI(url_this_page) + title_default_naver + encodeURI(title_this_page); 
+    </script>
 {% endblock %}

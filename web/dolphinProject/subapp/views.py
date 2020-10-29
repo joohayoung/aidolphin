@@ -2,7 +2,8 @@ from django.shortcuts import render,get_object_or_404,redirect
 from mainapp.models import MusicDB,Comment
 from django.db.models import Q, Count
 from mainapp.forms import CommentForm
-
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 def about(request):
@@ -20,6 +21,7 @@ def detail(request,MusicDB_id):
     }
     return render(request,'subapp/detail.html',context)
 
+@login_required
 def like(request,pk):
     musicdb = get_object_or_404(MusicDB, pk=pk)
     
@@ -31,6 +33,7 @@ def like(request,pk):
         
     return redirect('subapp:detail', musicdb.pk)
 
+@login_required
 def comments_new(request, music_pk): #POST 
     # 1. 요청이 POST 인지 점검
     if request.method  == 'POST': 
@@ -42,11 +45,13 @@ def comments_new(request, music_pk): #POST
             # 4. 통과하면 database에 저장 
             comment = form.save(commit=False)
             # 4-1. article 정보 주입
-            comment.music_id = music_pk 
+            comment.music_id = music_pk
+            comment.author = request.user 
             comment.save()
     # 5. 생성된 댓글을 확인할 수 있는 곳으로 안내 
     return redirect('subapp:detail', music_pk)
 
+@login_required
 def comments_delete(request, music_pk, pk): # POST 
     # 0. 요청이 POST인지 점검 
     if request.method == 'POST':
@@ -57,10 +62,17 @@ def comments_delete(request, music_pk, pk): # POST
     # 3. 삭제되었는지 확인 가능한 곳으로 안내 
     
     return redirect('subapp:detail', music_pk)
-
+    
+@login_required
 def comments_edit(request,music_pk, pk): # GET , POST 
     # Database에서 수정하려 하는 data 가져오기 
     comment = Comment.objects.get(pk=pk)
+
+    # 수정권한 확인
+    if request.user != comment.author:
+        messages.error(request, '수정권한이 없습니다.')
+        return redirect('subapp:detail', music_pk)
+
     # 0. 요청의 종류가 POST인지 GET인지 점검 
     if request.method == 'POST':
         # 실제로 수정 ! 
