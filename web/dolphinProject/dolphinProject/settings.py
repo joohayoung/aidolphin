@@ -124,3 +124,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+#Settings For Media
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') #프로젝트 루트 디렉터리/media/파일명
+MEDIA_URL = '/media/'# url주소~~/media/파일명
