@@ -72,7 +72,7 @@
                     category : {{music.label}} | license : {{music.licenses}} <br>
                     like : {{music.like.count}} | download : {{music.downloads}} <br>
                     date : {{music.date}} <br>
-                    <audio src='/media/music_sample/{{music.fname}}' controls>해당 브라우저는 오디오 태그를 지원하지 않습니다.</audio>
+                    <audio src='/media/music_sample/{{music.fname}}#t=,10' controls controlsList="nodownload">해당 브라우저는 오디오 태그를 지원하지 않습니다.</audio>
                 </div>
             {% empty %}
                 <div>

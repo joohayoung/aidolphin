@@ -11,6 +11,7 @@ urlpatterns = [
     path('<int:music_pk>/comments/new/', views.comments_new, name='comments_new'),
     path('<int:music_pk>/comments/<int:pk>/delete/', views.comments_delete, name = 'comments_delete'),
     path('<int:music_pk>/comments/<int:pk>/edit/', views.comments_edit, name ='comments_edit'),
+    path('downloads', views.downloads, name='downloads'),
     
     path('test/', views.test, name='test'), #127.0.0.1:8000/subapp/test
 ]

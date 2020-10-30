@@ -16,7 +16,12 @@
     {% endif %}
     </div>
      <h1>{{music.fname}}</h1>
-     <audio src='/music_sample/{{music.fname}}' controls>해당 브라우저는 오디오태그를 지원하지 않습니다.</audio>
+     <audio src='../../../media/music_sample/{{music.fname}}#t=,10' controls controlsList="nodownload">해당 브라우저는 오디오태그를 지원하지 않습니다.</audio>
+     <form action="{% url 'subapp:downloads' %}" method="POST" id='downloads'>
+         {% csrf_token %}
+        <a href="../../../media/music_sample/{{music.fname}}" download onclick="document.getElementById('downloads').submit();">다운로드</a>
+        <input type="hidden" name="music_id" value={{music.pk}}>
+    </form>
     <div>
         <div>
             sound wave img 

@@ -94,6 +94,16 @@ def comments_edit(request,music_pk, pk): # GET , POST
     }
     return render(request,'subapp/comments_edit.html', context)
 
+def downloads(request):
+    if request.method=='POST':
+        pk = request.POST.get('music_id')
+        music = MusicDB.objects.get(pk=pk)
+        temp = music.downloads
+        music.downloads = temp + 1
+        music.save()
+
+    return redirect('subapp:detail', pk)
+
 def mypage(request):
     return render(request, 'subapp/mypage.html')
     

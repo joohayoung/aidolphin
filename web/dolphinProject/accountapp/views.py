@@ -34,6 +34,7 @@ def login(request):
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
+        next = request.POST['next']
         if username and password:
             user = auth.authenticate(
                 request,
@@ -43,7 +44,9 @@ def login(request):
             if user is not None:
                 # 사용자가 있으면 로그인후 home으로
                 auth.login(request, user)
-                return redirect('mainapp:home')
+                # return redirect('mainapp:home')
+                # return redirect(request.POST['path'])
+                return redirect(next)
             else:
                 context['error'] = '아이디와 비밀번호를 다시 확인해주세요.'
         else:
@@ -51,10 +54,17 @@ def login(request):
             context['error'] = '아이디와 비밀번호를 모두 입력해주세요.'
 
     # Get Method
+    next = request.GET['next']
+    if next == '/search/':
+        context['next'] = '/'
+    else:
+        context['next'] = next
     return render(request, 'accountapp/login.html', context)
 
 def logout(request):
     if request.method == "POST":
         auth.logout(request)
     # 로그아웃하면 홈으로
-    return redirect("mainapp:home")
+    # return redirect("mainapp:home")
+    # 로그아웃하면 이전 페이지로
+    return redirect(request.POST['path'])
