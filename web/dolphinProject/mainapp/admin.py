@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import MusicDB, UploadMusicDB, Comment
+from .models import MusicDB, UploadMusicDB, Comment, UserMusicDB
 
 # Register your models here.
 class ArticleAdmin(admin.ModelAdmin):
@@ -11,3 +11,4 @@ class CommentAdmin(admin.ModelAdmin):
 admin.site.register(MusicDB)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(UploadMusicDB)
+admin.site.register(UserMusicDB)

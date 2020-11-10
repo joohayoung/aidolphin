@@ -9,9 +9,10 @@ class MusicDB(models.Model):
     label = models.CharField(max_length=30)
     licenses = models.CharField(max_length=50) 
     like = models.ManyToManyField(User, related_name='liked_posts')
-    date = models.DateTimeField()
+    date = models.DateTimeField(auto_now_add=True)
     downloads = models.IntegerField()
-    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True) #등록자 admin
+    real_author = models.CharField(max_length=30, null=True) #작가 license 가진사람????
 
     def __str__(self):
         return f'{self.id}: {self.fname}'
@@ -34,3 +35,14 @@ class Comment(models.Model):
     author=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     text = models.TextField()
     date = models.DateTimeField(auto_now_add = True)
+
+
+class UserMusicDB(models.Model):
+    audio = models.FileField(upload_to='music_sample')
+
+    def __str__(self):
+        return f'{self.id}: {self.audio}'
+
+    def delete(self, *args, **kwargs):
+        super(UserMusicDB, self).delete(*args, **kwargs)
+        os.remove(os.path.join(settings.MEDIA_ROOT, self.audio.path))

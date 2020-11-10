@@ -21,6 +21,7 @@
                 {% csrf_token %}
                 <input type="text" class="search-input" placeholder="search..." name="kw" value="{{kw|default_if_none:''}}">
                 <input type="hidden" name='licenses[]' value="{{'all'}}">
+                <input type="hidden" name="search_type" value="keyword">
                 <button type="submit" class="search-icon">
                     <img src="{% static 'image/white_search@0.5x.png' %}" alt='search icon'>
                 </button>
@@ -37,6 +38,8 @@
                     <input type="hidden" name='licenses[]' value="{{'all'}}">
                     <input type="hidden" name='label' id='label_input'>
                     <input type="hidden" name='audio' id='audio_input'>
+                    <!--<input type="hidden" name='similarlist' id='similarlist_input'>-->
+                    <input type="hidden" name="search_type" value="realtimesearch">
                     <button type="submit" id='realtime_search' style="display: none;">
                         search페이지로 넘어가는 제출(검색?)
                     </button>
@@ -48,6 +51,7 @@
         <div id='file'>
             <form method="POST" action="{% url 'mainapp:search' %}" enctype="multipart/form-data">
                 {% csrf_token %}
+                <input type="hidden" name="search_type" value="filesearch">
                 <input type="file" name="file" id="file_box" class="inputfile" accept="audio/*" capture="microphone" required/>
                 <label for="file_box"><strong>Choose a file</strong></label>
                 <input type="submit">

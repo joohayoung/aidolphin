@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+    <!--<link rel="stylesheet" href="{% static 'mainapp/.css' %}"> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+{% endblock %}
+
+{% block content %}
+    <h1>Upload page</h1>
+    {% if error %}
+        error : {{error}}
+    {% endif %}
+    <form action="{% url 'mainapp:upload' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        파일 업로드 : <input type="file" name="file" accept="audio/*" capture="microphone" required > <br>
+        <!-- 파일명 : <input type="text" id="filename" name="filename"> -->
+        이름 : 
+        <input type="radio" name="fname" id="file_name" value="fname" checked onclick="display_title()">
+        <label for="file_name">파일이름으로 저장</label> 
+        <input type="radio" name="fname" id="input_name" value="rename" onclick="display_title()"disabled>
+        <label for="input_name" >직접입력</label>
+        <div id="input_name_title" style="display: none;">제목? : <input type="text" name="fname_"></div><br>
+
+        저작권 : 
+        <input type="radio" name="license" id="Attribution" value="Attribution">
+        <label for="Attribution">Attribution</label>
+        <input type="radio" name="license" id="Attribution Noncommercial" value="Attribution Noncommercial">
+        <label for="Attribution Noncommercial">Attribution Noncommercial</label>
+        <input type="radio" name="license" id="Attribution Derivative Works" value="Attribution Derivative Works">
+        <label for="Attribution Derivative Works">Attribution Derivative Works</label>
+        <input type="radio" name="license" id="Attribution Share-alike" value="Attribution Share-alike">
+        <label for="Attribution Share-alike">Attribution Share-alike</label>
+        <input type="radio" name="license" id="Attribution Noncommercial Share-alike" value="Attribution Noncommercial Share-alike">
+        <label for="Attribution Noncommercial Share-alike">Attribution Noncommercial Share-alike</label>
+        <input type="radio" name="license" id="Attribution Noncommercial Derivative Works" value="Attribution Noncommercial Derivative Works">
+        <label for="Attribution Noncommercial Derivative Works">Attribution Noncommercial Derivative Works</label>
+        <input type="radio" name="license" id="CreativeCommons0" value="CreativeCommons0">
+        <label for="CreativeCommons0">Creative Commons 0</label> <br>
+
+        저작자:
+        <input type="radio" name="author" id="user_" value="user_" onclick="display_author()">
+        <label for="user_">본인(작성자)</label>
+        <input type="radio" name="author" id="unknown" value="unknown" onclick="display_author()">
+        <label for="unknown">알 수 없음</label>
+        <input type="radio" name="author" id="author_" value="author_" onclick="display_author()">
+        <label for="author_">작가 입력</label>
+        <div id="author_input" style="display: none;">작가 : <input type="text" name="author_"></div><br>
+
+        라벨:
+        <input type="radio" name="label" id="auto" value="auto" onclick="display_label_option()">
+        <label for="auto">자동입력</label>
+        <input type="radio" name="label" id="self" value="self" onclick="display_label_option()">
+        <label for="self">직접입력</label>
+        <div id="label_option" style="display: none;">
+            <select name="label_">
+                <option value="Hi-hat">Hi-hat</option>
+                <option value="Saxophone">Saxophone</option>
+                <option value="Trumpet">Trumpet</option>
+                <option value="Glockenspiel">Glockenspiel</option>
+                <option value="Cello">Cello</option>
+            </select>
+            라벨 나중에 더 추가하기
+        </div><br>
+
+        <!-- like date downloads > view에서 자동입력할것 -->
+
+        <button type="submit">등록하기</button>
+    </form>
+    <script>
+        function display_title(){
+            if($('input:radio[id="input_name"]').is(":checked")){
+                $('#input_name_title').show();
+            }else{
+                $('#input_name_title').hide();
+            }
+        }
+
+        function display_author(){
+            if($('input:radio[id="author_"]').is(":checked")){
+                $('#author_input').show();
+            }else{
+                $('#author_input').hide();
+            }
+        }
+
+        function display_label_option(){
+            if($('input:radio[id="self"]').is(":checked")){
+                $('#label_option').show();
+            }else{
+                $('#label_option').hide();
+            }
+        }
+    </script>
+{% endblock %}

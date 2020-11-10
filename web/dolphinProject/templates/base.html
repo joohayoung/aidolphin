@@ -39,10 +39,11 @@
                             <button type = submit>Log-Out</button>
                         </form>
                     </li>
+                    <li><a href="{% url 'mainapp:upload' %}">Upload</a></li>
                 {% else %}
                     <!-- 로그인하지 않은 사용자 -->
-                    <!-- <li><a href="{% url 'accountapp:login' %}">Log-In</a></li> -->
-                    <li><a href="{% url 'accountapp:login' %}?next={{ request.path }}">Log-In</a></li>
+                     <li><a href="{% url 'accountapp:login' %}">Log-In</a></li>
+                    <!--<li><a href="{% url 'accountapp:login' %}?next={{ request.path }}">Log-In</a></li>-->
                     <li><a href="{% url 'accountapp:sign_up' %}">Sign-Up</a></li>
                 {% endif %}
             </ul>

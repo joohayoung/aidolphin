@@ -17,18 +17,22 @@
                 {% if license == 'all' %}
                     all<br>
                 {% else %}
-                    {%if 'author' in license%}저적자 표기안함, {%else%}저작자옵션 없음,{% endif %}
-                    {%if 'commercial' in license%}상업적이용가능, {% else %}상업적이용옵션 없음,{% endif %}
-                    {%if 'work' in license%}변경가능{% else %}변경옵션없음{% endif %}<br>
+                    {%if 'author' in license%}저적자 표기안함,<br> {%else%}저작자옵션 없음,<br>{% endif %}
+                    {%if 'commercial' in license%}상업적이용가능,<br> {% else %}상업적이용옵션 없음,<br>{% endif %}
+                    {%if 'work' in license%}변경가능<br>{% else %}변경옵션없음<br>{% endif %}<br>
                 {% endif %}
                 정렬기준 : {{ sort }} <br>
                 <br>
                 <div class='space_around_ct'>
                     <button id='option_bt' type="reset">초기화</button>
-                    <button id='option_bt' type="submit">적용</button>
+                    <button id='option_bt' type="submit"{% if search_type == 'filesearch' %}disabled {% endif %}>
+                    <!--<button id='option_bt' type="submit"> -->
+                    적용</button>
                     <input type="hidden" name='kw' value="{{ kw|default_if_none:'' }}">
                     <input type="hidden" name='label' value="{{ label|default_if_none:'' }}">
                     <input type="hidden" name='audio' value="{{ audio|default_if_none:'' }}">
+                    <input type="hidden" name="search_type" value="{{ search_type|default_if_none:'' }}">
+                    <!--<input type="hidden" name="similarlist" value="{{similarlist|default_if_none:''}}">-->
                 </div>
 
                 <h4>저작권</h4>
@@ -55,6 +59,7 @@
         <!-- 결과 -->
         <div id='result'>
             <h3>show result </h3>
+            <!-- <div>{{search_type}}, {{name_list}}, </div> -->
             <p>
                 {% if label %}
                 입력파일명 : {{audio}}<br>
