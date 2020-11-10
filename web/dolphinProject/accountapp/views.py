@@ -29,7 +29,7 @@ def sign_up(request):
 
 def login(request):
     context={}
-
+    
     # POST Method
     if request.method == "POST":
         username = request.POST['username']
@@ -44,6 +44,11 @@ def login(request):
             if user is not None:
                 # 사용자가 있으면 로그인후 home으로
                 auth.login(request, user)
+                next_url = request.POST.get('next')
+                print(next_url)
+                if next_url :
+                    return redirect(next_url)
+            
                 return redirect('mainapp:home')
                 # return redirect(request.POST['path'])
                 # return redirect(next)
@@ -54,17 +59,19 @@ def login(request):
             context['error'] = '아이디와 비밀번호를 모두 입력해주세요.'
 
     # Get Method
-    # next = request.GET['next']
-    # if next == '/search/':
-    #     context['next'] = '/'
-    # else:
-    #     context['next'] = next
+    next_url = request.GET.get('next')
+    if next_url == '/search/':
+        context['next'] = '/'
+    else:
+        context['next'] = next_url
     return render(request, 'accountapp/login.html', context)
 
 def logout(request):
     if request.method == "POST":
         auth.logout(request)
-    # 로그아웃하면 홈으로
-    # return redirect("mainapp:home")
+    
+    if request.POST['path'] == '/search/':
+        # 로그아웃하면 홈으로
+        return redirect("mainapp:home")
     # 로그아웃하면 이전 페이지로
     return redirect(request.POST['path'])
