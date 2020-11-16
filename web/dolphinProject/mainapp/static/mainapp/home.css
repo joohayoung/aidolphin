@@ -11,8 +11,8 @@
 #home_container{
     width: 100%;
     height: 404px;
-    border: solid;
-    border-color: orange;
+    /* border: solid; */
+    /* border-color: orange; */
 }
 
 #live{
@@ -23,8 +23,15 @@
 }
 
 #banner_text{
-    color: white;
-    text-align: center;
-    margin: 50px;
+    /* color: white; */
+    font-size: 45px;
+    font-weight: 700;
+    margin-top: 100px;
+    margin-left: 50px;
+}
+#subtext{
+    margin-left: 50px;
+    margin-top: 30px;
+    line-height: 30px;
 }
 

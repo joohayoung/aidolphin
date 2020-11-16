@@ -6,16 +6,17 @@ body{
 }
 
 #nav{
-    border: solid green;
+    /* border: solid green; */
 }
 #bottom{
-    border: solid yellow;
+    /* border: solid yellow; */
     margin-top: 100px;
     margin-bottom: 100px;
     font-weight: 100;
+    text-align: center;
 }
 #main{
-    border: solid pink
+    /* border: solid pink */
 }
 ul {
     list-style:none;
@@ -29,8 +30,9 @@ li {
 }
 
 .logo{
-    width: fit-content;
-    height: fit-content;
+    width: 150px;
+    height: auto;
+    margin-top: 5px;
 }
 
 #container{
@@ -38,12 +40,16 @@ li {
     flex-direction: row;
 }
 
+#container ul{
+    margin-top: 15px;
+}
+
 
 .search {
     display: flex;
     flex-flow: row;
     height: 70px;
-    border: solid red;
+    /* border: solid red; */
     justify-content: center;
 }
 
@@ -63,9 +69,15 @@ li {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #536bf6
+    /* background-color: #536bf6 */
 }
 
 .search-icon img{
     width: 25px;
+}
+
+#signup{
+    border: solid;
+    border-color: gray;
+    border-radius: 50px;
 }

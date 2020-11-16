@@ -21,14 +21,17 @@
                     {% csrf_token %}
                     <input type="text" class="search-input" placeholder="search..." name="kw">
                     <button type="submit" class="search-icon">
-                        <img src="{% static 'image/white_search@0.5x.png' %}" alt='search icon'>
+                        AI
+                        {% comment %} <img src="{% static 'image/white_search@0.5x.png' %}" alt='search icon'> {% endcomment %}
                     </button>
                 </form>
             </div>
             <ul>
-                <li><a href="{% url 'mainapp:home' %}">ai-dolphin</a></li>
-                <li><a href="{% url 'subapp:about' %}">About Us</a></li>
-                
+                <li><a href="{% url 'mainapp:home' %}">Home</a></li>
+                <li><a href="{% url 'subapp:about' %}">About</a></li>
+                <li><a href="{% url 'mainapp:search' %}">Search</a></li>
+                <li><a href="{% url 'subapp:about' %}">Features</a></li>
+                <li><a href="{% url 'subapp:about' %}">FAQ</a></li>                
                 {% if user.is_authenticated %}
                 <!-- 로그인 한 사용자 -->
                     <li>My Page</li>
@@ -44,7 +47,7 @@
                     <!-- 로그인하지 않은 사용자 -->
                      <!-- <li><a href="{% url 'accountapp:login' %}">Log-In</a></li> -->
                     <li><a href="{% url 'accountapp:login' %}?next={{ request.path }}">Log-In</a></li>
-                    <li><a href="{% url 'accountapp:sign_up' %}">Sign-Up</a></li>
+                    <li id='signup'><a href="{% url 'accountapp:sign_up' %}">Sign-Up</a></li>
                 {% endif %}
             </ul>
         </div>
