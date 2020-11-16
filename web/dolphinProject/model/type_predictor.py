@@ -77,8 +77,8 @@ def main_process(model, on_predicted):
         ensembled_pred = geometric_mean_preds(np.array([pred for pred in pred_queue]))
         # on_predicted(ensembled_pred)
         
-        # list에 추가
         preds_list.append(on_predicted(ensembled_pred))
+        
 
 # # Main controller
 ## 파일이 입력되었을때 돌아가는 함수
@@ -124,7 +124,8 @@ def one_result_print(preds_list):
         return ''
 
 def run_predictor():
-    model = get_model(args.model_pb_graph) 
+    model,= get_model(args.model_pb_graph)
+
     # 파이썬 호출시 -pb 옵션으로 들어온것
     # default = '' 로 입력시 conf.runtime_model_file 사용
 
