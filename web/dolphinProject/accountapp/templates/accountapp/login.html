@@ -25,6 +25,9 @@
             </div>
             <input type="hidden" name="next" value="{{ next }}">
             <button type="submit">로그인</button>
+            <br>
+            Not a member? <a href="{% url 'accountapp:sign_up' %}">Signup now</a>
+
         </form>
     </div>
 {% endblock %}
