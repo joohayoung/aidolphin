@@ -26,7 +26,7 @@ conf.labels = ['Hi-hat', 'Saxophone', 'Trumpet', 'Glockenspiel', 'Cello', 'Knock
        'Drawer_open_or_close', 'Applause', 'Acoustic_guitar',
        'Violin_or_fiddle', 'Finger_snapping']
 
-conf.mood_labels = ['어두운', '화남', '밝게', '슬픔', '행복']
+conf.mood_labels = ['어두움', '화남', '밝게', '슬픔', '행복']
 
 # Training configurations
 # conf.folder = '.'

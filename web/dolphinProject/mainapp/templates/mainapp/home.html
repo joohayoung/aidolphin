@@ -1,4 +1,4 @@
-{% extends 'basehome.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block style %}
@@ -6,14 +6,17 @@
 {% endblock %}
 
 {% block content %}
-    <div id="banner">
+    {% comment %} <div id="banner">
         <img class='banner_img' src="{% static 'mainapp/image/banner3.png' %}" alt='banner'>
-    </div>
+    </div> {% endcomment %}
     <div id='home_container'>
         <div id='banner_text'>
             Ai Dolphin<br>
-            가장 빠르고 정확한 음향 분석과 검색 Ai<br>
-            이제 음향은 dolphin으로!
+            빠르고 정확한 음향 분석 및 검색 AI<br>
+        </div>
+        <div id='subtext'>
+            Ai Dolphin 을 통해 원하는 음향을 보다 쉽고 빠르게 찾아보세요!<br>
+            나에게 필요한 License의 음향을 검색하고 다운로드 받을 수 있습니다.
         </div>
         <!-- 키워드 검색 -->
         <div class="search">
