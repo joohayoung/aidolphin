@@ -16,7 +16,7 @@
             <a href="{% url 'mainapp:home' %}">
                 <img class='logo' src="{% static 'image/logo_text.png' %}" alt='ai dolphin logo'>
             </a>
-            <div class="search">
+            <div class="nav_search">
                 <form action="{% url 'mainapp:search' %}" method="GET">
                     {% csrf_token %}
                     <input type="text" class="search-input" placeholder="search..." name="kw">
@@ -46,8 +46,8 @@
                 {% else %}
                     <!-- 로그인하지 않은 사용자 -->
                      <!-- <li><a href="{% url 'accountapp:login' %}">Log-In</a></li> -->
-                    <li><a href="{% url 'accountapp:login' %}?next={{ request.path }}">Log-In</a></li>
-                    <li id='signup'><a href="{% url 'accountapp:sign_up' %}">Sign-Up</a></li>
+                    <li><a href="{% url 'accountapp:login' %}?next={{ request.path }}">Log-in</a></li>
+                    <li id='signup'><a href="{% url 'accountapp:sign_up' %}">Sign - in</a></li>
                 {% endif %}
             </ul>
         </div>
