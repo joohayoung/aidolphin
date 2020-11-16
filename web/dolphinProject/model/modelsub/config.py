@@ -26,7 +26,7 @@ conf.labels = ['Hi-hat', 'Saxophone', 'Trumpet', 'Glockenspiel', 'Cello', 'Knock
        'Drawer_open_or_close', 'Applause', 'Acoustic_guitar',
        'Violin_or_fiddle', 'Finger_snapping']
 
-conf.mood_labels = ['어두움', '화남', '밝게', '슬픔', '행복']
+conf.mood_labels = ['어두운', '슬픔', '화남', '행복', '밝음']
 
 # Training configurations
 # conf.folder = '.'
@@ -47,4 +47,4 @@ conf.rt_process_count = 1
 conf.rt_oversamples = 10
 conf.pred_ensembles = 10
 conf.runtime_model_file = 'model/modelsub/mobilenetv2_fsd2018_41cls.pb'
-conf.runtime_model_file_1 = 'model/mobilenetv2_youtube_5cls_1.pb'
+conf.runtime_model_file_1 = 'model/modelsub/mobilenetv2_youtube_5cls_44100.pb'

@@ -6,6 +6,7 @@ import json
 from django.contrib.auth.decorators import login_required
 from similarModel.similarmodel import similarAnalysis
 from model.type_predictor import label_type
+from model.mood_predictor import mood_type
 
 # Create your views here.
 
@@ -76,16 +77,20 @@ def realtime(request):
             uploadfile.save()
             context['audio'] = audio.name
             # print('views.py realtime audioname : ', audio.name)
+
             # audio 파일을 모델 함수에 입력 아웃풋 lagel값
             file_path = f"media/upload_music/{audio}"
             label = label_type(file_path) # 모델활용
             # label = 'Telephone' #확인용
             context['label'] = label
-            # print('views.py realtime label : ', label)
+
+            # 분위기 분류
+            mood = mood_type(file_path)
+            # mood = 'test' #확인용
+            context['mood'] = mood #모델활용
+            
             # 파일을 지우기 전에 유사도 분석까지 해야한다
             # similarlist = similarAnalysis(audio.name)
-            
-
             # #############################################################################
             # music_list = MusicDB.objects.filter(fname = similarlist[0])
             # for name in similarlist[1:] :
@@ -99,9 +104,11 @@ def realtime(request):
         else:
             context['audio'] = 'audio_none'
             context['label'] = 'label_none'
+            context['mood'] = 'mood_none'
     else:
         context['audio'] = 'audio_none'
         context['label'] = 'label_none'
+        context['mood'] = 'mood_none'
 
     return HttpResponse(json.dumps(context))
 
@@ -112,6 +119,7 @@ def search(request):
     search_type = None
     similarlist = None
     check = True
+    mood = None
 
     ####파일검색(최초)
     if request.method=='POST':
@@ -127,6 +135,10 @@ def search(request):
             # label = 'Telephone' #확인용
             context['label'] = label
 
+            mood = mood_type(file_path)
+            # mood = 'test' #확인용
+            context['mood'] = mood #모델활용
+
             # 파일을 지우기 전에 유사도 분석까지 해야한다
             similarlist = similarAnalysis(audio.name) 
             # context['similarlist'] = similarlist   
@@ -140,6 +152,8 @@ def search(request):
         context['label'] = label
         audio = request.GET.get('audio', '')
         context['audio'] = audio
+        mood = request.GET.get('mood', '')
+        context['mood'] = mood
 
     ### GET 요청으로 들어올 경우 ##############################################
     if search_type == None:

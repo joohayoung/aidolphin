@@ -31,6 +31,7 @@
                     <input type="hidden" name='kw' value="{{ kw|default_if_none:'' }}">
                     <input type="hidden" name='label' value="{{ label|default_if_none:'' }}">
                     <input type="hidden" name='audio' value="{{ audio|default_if_none:'' }}">
+                    <input type="hidden" name='mood' value="{{ mood|default_if_none:'' }}">
                     <input type="hidden" name="search_type" value="{{ search_type|default_if_none:'' }}">
                     <!--<input type="hidden" name="similarlist" value="{{similarlist|default_if_none:''}}">-->
                 </div>
@@ -63,7 +64,7 @@
             <p>
                 {% if label %}
                 입력파일명 : {{audio}}<br>
-                분석결과 : {{label}}<br>
+                분석결과 : {{label}}, {{mood}}<br>
                 파형 : (예시.png 또는 그래프 추가 등...)<br>
                 {% else %}
                 You have searched for : {{ kw }}<br>
