@@ -19,7 +19,22 @@
      <audio src='../../../media/music_sample/{{music.fname}}#t=,10' controls controlsList="nodownload">해당 브라우저는 오디오태그를 지원하지 않습니다.</audio>
      <form action="{% url 'subapp:downloads' %}" method="POST" id='downloads'>
          {% csrf_token %}
-        <a href="../../../media/music_sample/{{music.fname}}" download onclick="document.getElementById('downloads').submit();">다운로드</a>
+         <script type="text/javascript">
+            function showConfirm() {
+                if (confirm("저작물 이용에 관한 사항을 확인하셨습니까?(동의/반대)"))
+                {                                                                              
+                    alert("파일을 다운로드 합니다.");
+                    document.getElementById('downloads').submit();
+
+                    return true;
+                } else {
+                    alert("다운로드 하려면 확인 사항을 읽고 확인 버튼을 누르세요.");
+                    return false;
+                }
+            }
+        </script>
+        <a href="../../../media/music_sample/{{music.fname}}" download onclick="return showConfirm();">다운로드</a>
+        <!--<a href="../../../media/music_sample/{{music.fname}}" download onclick="document.getElementById('downloads').submit();">다운로드</a>-->
         <input type="hidden" name="music_id" value={{music.pk}}>
     </form>
     <div>
