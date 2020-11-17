@@ -19,47 +19,63 @@
             나에게 필요한 License의 음향을 검색하고 다운로드 받을 수 있습니다.
         </div>
         <!-- 키워드 검색 -->
-        <div class="search">
+        <div id="home_search">
             <form action="{% url 'mainapp:search' %}" method="GET">
                 {% csrf_token %}
-                <input type="text" class="search-input" placeholder="search..." name="kw" value="{{kw|default_if_none:''}}">
+                <input type="text" id="home_search_input" placeholder="search..." name="kw" value="{{kw|default_if_none:''}}">
                 <input type="hidden" name='licenses[]' value="{{'all'}}">
                 <input type="hidden" name="search_type" value="keyword">
-                <button type="submit" class="search-icon">
-                    <img src="{% static 'image/white_search@0.5x.png' %}" alt='search icon'>
+                <button type="submit" id='home_search_button' class="search-icon">
+                    Search
+                    {% comment %} <img src="{% static 'image/white_search@0.5x.png' %}" alt='search icon'> {% endcomment %}
                 </button>
             </form>
         </div>
         <!-- 실시간검색 -->
-        <div id='live'>
-            <input type=checkbox id="chk-hear-mic"><label for="chk-hear-mic">마이크 소리 듣기</label>
-            <button id="record">녹음</button>
-            <button id="stop">정지</button>
-            <div id="sound-clips">
-                <form action="{% url 'mainapp:search' %}" method="GET">
+        <div id='search_option_ct'>
+            <div id='live' class='search_option'>
+                <button id="record">
+                </button>
+                <label for='record'>
+                    <img class='bt_img' src='/static/mainapp/image/record.svg'>
+                </label>
+                <button id="stop">정지</button>
+                <label for='stop'>
+                    <img class='bt_img' src='/static/mainapp/image/stop.svg'>
+                </label>
+                <div id="sound-clips" >
+                    <form action="{% url 'mainapp:search' %}" method="GET">
+                        {% csrf_token %}
+                        <input type="hidden" name='licenses[]' value="{{'all'}}">
+                        <input type="hidden" name='label' id='label_input'>
+                        <input type="hidden" name='audio' id='audio_input'>
+                        <input type="hidden" name="mood" id='mood_input'>
+                        <!--<input type="hidden" name='similarlist' id='similarlist_input'>-->
+                        <input type="hidden" name="search_type" value="realtimesearch">
+                        <button type="submit" id='realtime_search' style="display: none;">
+                            search페이지로 넘어가는 제출(검색?)
+                        </button>
+                    </form>
+                </div>
+                <input type=checkbox id="chk-hear-mic"><label for="chk-hear-mic">마이크 소리 듣기</label>
+                <!-- 스크립트 파일(home.js)로 따로 분리 -->
+            </div>
+            <!-- 파일검색 -->
+            <div id='file' class='search_option'>
+                <form method="POST" action="{% url 'mainapp:search' %}" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <input type="hidden" name='licenses[]' value="{{'all'}}">
-                    <input type="hidden" name='label' id='label_input'>
-                    <input type="hidden" name='audio' id='audio_input'>
-                    <input type="hidden" name="mood" id='mood_input'>
-                    <!--<input type="hidden" name='similarlist' id='similarlist_input'>-->
-                    <input type="hidden" name="search_type" value="realtimesearch">
-                    <button type="submit" id='realtime_search' style="display: none;">
-                        search페이지로 넘어가는 제출(검색?)
-                    </button>
+                    <input type="hidden" name="search_type" value="filesearch">
+                    <input type="file" name="file" id="file_box" class="inputfile" accept="audio/*" capture="microphone" required/>
+                    <label for='file'>
+                        <img class='bt_img' src='/static/mainapp/image/file.svg'>
+                    </label>
+                    {% comment %} <label for="file_box"><strong>Choose a file</strong></label> {% endcomment %}
+                    <input type="submit" id='submit'>
+                    <label for='submit'>
+                        <img class='bt_img' src='/static/mainapp/image/submit.svg'>
+                    </label>
                 </form>
             </div>
-            <!-- 스크립트 파일(home.js)로 따로 분리 -->
-        </div>
-        <!-- 파일검색 -->
-        <div id='file'>
-            <form method="POST" action="{% url 'mainapp:search' %}" enctype="multipart/form-data">
-                {% csrf_token %}
-                <input type="hidden" name="search_type" value="filesearch">
-                <input type="file" name="file" id="file_box" class="inputfile" accept="audio/*" capture="microphone" required/>
-                <label for="file_box"><strong>Choose a file</strong></label>
-                <input type="submit">
-            </form>
         </div>
     </div>
     <script src="/static/mainapp/home.js"></script>

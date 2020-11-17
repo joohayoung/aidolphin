@@ -20,10 +20,10 @@
 }
 
 #live{
-    color: white;
+    color: black;
 }
 #file{
-    color: white;
+    color: black;
 }
 
 #banner_text{
@@ -40,3 +40,55 @@
     line-height: 30px;
 }
 
+#home_search_input{
+    height: 50px;
+    width: 40%;
+    border-radius: 50px;
+    border-color: rgb(230, 230, 230);
+    font-size: 20px;
+    padding-left: 20px;
+}
+
+#home_search_button{
+    position: absolute;
+    left: 40%;
+    height: 55px;
+    width: 200px;
+    background-image: linear-gradient(to right, #1578FF, #72A1FF );
+    
+    color: white;
+    font-weight: 100;
+    font-size: 20px;
+    border: none;
+    border-radius: 50px;
+}
+#home_search{
+    margin-top: 50px;
+    margin-left: 100px;
+}
+/* #live{
+    width: 200px;
+}
+#file{
+    width: 200px;
+
+} */
+
+.bt_img{
+    margin: 10px;
+    width: 70px;
+    height: 70px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.25);
+    border-radius: 10px;
+}
+
+.search_option button, #submit, #file_box{
+    display: none;
+}
+
+#search_option_ct{
+    margin-left: 100px;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: row;
+}
