@@ -19,20 +19,7 @@
      <audio src='../../../media/music_sample/{{music.fname}}#t=,10' controls controlsList="nodownload">해당 브라우저는 오디오태그를 지원하지 않습니다.</audio>
      <form action="{% url 'subapp:downloads' %}" method="POST" id='downloads'>
          {% csrf_token %}
-         <script type="text/javascript">
-            function showConfirm() {
-                if (confirm("저작물 이용에 관한 사항을 확인하셨습니까?(동의/반대)"))
-                {                                                                              
-                    alert("파일을 다운로드 합니다.");
-                    document.getElementById('downloads').submit();
-
-                    return true;
-                } else {
-                    alert("다운로드 하려면 확인 사항을 읽고 확인 버튼을 누르세요.");
-                    return false;
-                }
-            }
-        </script>
+         <!--script는 맨 아래로 이동-->
         <a href="../../../media/music_sample/{{music.fname}}" download onclick="return showConfirm();">다운로드</a>
         <!--<a href="../../../media/music_sample/{{music.fname}}" download onclick="document.getElementById('downloads').submit();">다운로드</a>-->
         <input type="hidden" name="music_id" value={{music.pk}}>
@@ -51,6 +38,7 @@
             fname: {{music.fname}} <br>
             author:{% if music.author %}<a href="">{{music.author}}</a>{% else %}unknown{% endif %} <br> <!--마이페이지(업로더페이지)링크 달기-->
             label: {{music.label}} <br>
+            mood : {{music.mood}}<br>
             licenses: {{music.licenses}} <br>
             date: {{music.date}} <br>
             {% if user.is_authenticated %} 
@@ -191,5 +179,19 @@
         var url_combine_fb = url_default_fb + url_this_page; 
         var url_combine_tw = url_default_tw_txt + document.title + url_default_tw_url + url_this_page; 
         var url_combine_naver = url_default_naver + encodeURI(url_this_page) + title_default_naver + encodeURI(title_this_page); 
+
+
+        function showConfirm() {
+                if (confirm("저작물 이용에 관한 사항을 확인하셨습니까?(동의/반대)"))
+                {                                                                              
+                    alert("파일을 다운로드 합니다.");
+                    document.getElementById('downloads').submit();
+
+                    return true;
+                } else {
+                    alert("다운로드 하려면 확인 사항을 읽고 확인 버튼을 누르세요.");
+                    return false;
+                }
+            }
     </script>
 {% endblock %}

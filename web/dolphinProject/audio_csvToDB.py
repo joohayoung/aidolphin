@@ -9,7 +9,7 @@ django.setup()
 from mainapp.models import MusicDB
 from django.contrib.auth.models import User
 
-CSV_PATH ="./audio_train_info.csv"
+CSV_PATH ="./train_plus_mood.csv"
 # dolphinProject\audio_train_info.csv
 #csv 파일 확정되면 경로 설정()
 
@@ -27,6 +27,7 @@ with open(CSV_PATH, newline='', encoding='UTF8') as csvfile:
             downloads = 0,
             author = User.objects.get(username = 'admin'),
             real_author = row['freesound_id'],
+            mood = row['mood'],
         )
         count += 1
 

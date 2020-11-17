@@ -13,6 +13,7 @@ class MusicDB(models.Model):
     downloads = models.IntegerField()
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True) #등록자 admin
     real_author = models.CharField(max_length=30, null=True) #작가 license 가진사람????
+    mood = models.CharField(max_length=30) #분위기값
 
     def __str__(self):
         return f'{self.id}: {self.fname}'

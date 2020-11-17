@@ -59,8 +59,61 @@
                 <option value="Trumpet">Trumpet</option>
                 <option value="Glockenspiel">Glockenspiel</option>
                 <option value="Cello">Cello</option>
+                <option value="Knock">Knock</option>
+                <option value="Gunshot_or_gunfire">Gunshot_or_gunfire</option>
+                <option value="Clarinet">Clarinet</option>
+                <option value="Computer_keyboard">Computer_keyboard</option>
+                <option value="Keys_jangling">Keys_jangling</option>
+
+                <option value="Snare_drum">Snare_drum</option>
+                <option value="Writing">Writing</option>
+                <option value="Laughter">Laughter</option>
+                <option value="Tearing">Tearing</option>
+                <option value="Fart">Fart</option>
+                <option value="Oboe">Oboe</option>
+                <option value="Flute">Flute</option>
+                <option value="Cough">Cough</option>
+                <option value="Telephone">Telephone</option>
+                <option value="Bark">Bark</option>
+
+                <option value="Chime">Chime</option>
+                <option value="Bass_drum">Bass_drum</option>
+                <option value="Bus">Bus</option>
+                <option value="Squeak">Squeak</option>
+                <option value="Scissors">Scissors</option>
+                <option value="Harmonica">Harmonica</option>
+                <option value="Gong">Gong</option>
+                <option value="Microwave_oven">Microwave_oven</option>
+                <option value="Burping_or_eructation">Burping_or_eructation</option>
+                <option value="Double_bass">Double_bass</option>
+
+                <option value="Shatter">Shatter</option>
+                <option value="Fireworks">Fireworks</option>
+                <option value="Tambourine">Tambourine</option>
+                <option value="Cowbell">Cowbell</option>
+                <option value="Electric_piano">Electric_piano</option>
+                <option value="Meow">Meow</option>
+                <option value="Drawer_open_or_close">Drawer_open_or_close</option>
+                <option value="Applause">Applause</option>
+                <option value="Acoustic_guitar">Acoustic_guitar</option>
+                <option value="Violin_or_fiddle">Violin_or_fiddle</option>
+                <option value="Finger_snapping">Finger_snapping</option>
             </select>
-            라벨 나중에 더 추가하기
+        </div><br>
+
+        분위기:
+        <input type="radio" name="mood" id='mood_auto' value="auto" onclick="display_mood_option()">
+        <label for="mood_auto">자동입력</label>
+        <input type="radio" name="mood" id="mood_self" value="self" onclick="display_mood_option()">
+        <label for="mood_self">직접입력</label>
+        <div id="mood_option" style="display: none;">
+            <select name="mood_">
+                <option value="어두운">어두운</option>
+                <option value="슬픔">슬픔</option>
+                <option value="화남">화남</option>
+                <option value="행복">행복</option>
+                <option value="밝음">밝음</option>
+            </select>
         </div><br>
 
         <!-- like date downloads > view에서 자동입력할것 -->
@@ -89,6 +142,14 @@
                 $('#label_option').show();
             }else{
                 $('#label_option').hide();
+            }
+        }
+
+        function display_mood_option(){
+            if($('input:radio[id="mood_self"]').is(":checked")){
+                $('#mood_option').show();
+            }else{
+                $('#mood_option').hide();
             }
         }
     </script>

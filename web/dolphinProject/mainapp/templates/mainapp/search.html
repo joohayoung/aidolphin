@@ -76,8 +76,8 @@
                     <h4><a href="/../subapp/{{music.pk}}">{{music.fname}}</a></h4>
                     <!-- 확인용으로 정보 다 집어넣음 나중에 생략할거 생략하기 -->
                     category : {{music.label}} | license : {{music.licenses}} <br>
-                    like : {{music.like.count}} | download : {{music.downloads}} <br>
-                    date : {{music.date}} <br>
+                    mood : {{music.mood}} | download : {{music.downloads}} <br>
+                    like : {{music.like.count}} | date : {{music.date}} <br>
                     <audio src='/media/music_sample/{{music.fname}}#t=,10' controls controlsList="nodownload">해당 브라우저는 오디오 태그를 지원하지 않습니다.</audio>
                 </div>
             {% empty %}

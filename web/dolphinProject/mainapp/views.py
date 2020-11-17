@@ -5,8 +5,8 @@ from django.http import HttpResponse
 import json
 from django.contrib.auth.decorators import login_required
 from similarModel.similarmodel import similarAnalysis
-from model.type_predictor import label_type
-from model.mood_predictor import mood_type
+# from model.type_predictor import label_type #라벨 분류
+# from model.mood_predictor import mood_type #분위기 분류
 
 # Create your views here.
 
@@ -24,37 +24,49 @@ def upload(request):
             userfile.save()
 
             ##파일정보를 DB에 저장
+            # 파일이름
             fname = request.POST.get('fname_', '')
             if fname =='rename':
                 fname = request.POST.get('fname_')
             else:
                 fname = audio.name
 
-            print(fname)
-
+            #라벨종류
             label = request.POST.get('label')
             if label == 'self':
                 label = request.POST.get('label_')
             else:
-                # label = 'Telephone' #확인용
                 file_path = f"media/music_sample/{audio}"
-                label = label_type(file_path)#모델이용하기
+                label = 'Telephone' #확인용
+                # label = label_type(file_path)#모델이용하기
 
+            #분위기 종류
+            mood = request.POST.get('mood')
+            if label == 'self':
+                label = request.POST.get('mood_')
+            else:
+                file_path = f"media/music_sample/{audio}"
+                mood = '슬픔' #확인용
+                # mood = mood_type(file_path)#모델이용하기
+            #라이센스 
             licenses = request.POST.get('license')
-            
-            author_op = request.POST.get('author')
+            # 업로더?
             author = request.user
-            if author_op == 'user_':
+            # 작가
+            author_op = request.POST.get('author')
+            if author_op == 'user_': #본인
                 real_author = request.user.username
-            elif author_op == 'author':
+            elif author_op == 'author': #직접입력
                 real_author = request.POST.get('author_')
-            else :
-                newmusic = MusicDB(fname = fname, label = label, licenses = licenses, downloads = 0)
+            else : #알수 없음
+                newmusic = MusicDB(fname = fname, label = label, licenses = licenses, downloads = 0, mood=mood)
                 newmusic.save()
-                return redirect('mainapp:home') # 또는 마이페이지?
+                linkpk = MusicDB.objects.get(fname=fname).pk
+                return redirect('subapp:detail', linkpk )
+                # return redirect('mainapp:home') # 또는 마이페이지?
 
             newmusic = MusicDB(fname = fname, label = label, licenses = licenses,
-            downloads = 0, author = author)
+            downloads = 0, author = author, mood=mood)
             newmusic.save()
 
             linkpk = MusicDB.objects.get(fname=fname).pk
@@ -80,14 +92,14 @@ def realtime(request):
 
             # audio 파일을 모델 함수에 입력 아웃풋 lagel값
             file_path = f"media/upload_music/{audio}"
-            label = label_type(file_path) # 모델활용
-            # label = 'Telephone' #확인용
+            # label = label_type(file_path) # 모델활용
+            label = 'Telephone' #확인용
             context['label'] = label
 
             # 분위기 분류
-            mood = mood_type(file_path)
-            # mood = 'test' #확인용
-            context['mood'] = mood #모델활용
+            # mood = mood_type(file_path)#모델활용
+            mood = '슬픔' #확인용
+            context['mood'] = mood 
             
             # 파일을 지우기 전에 유사도 분석까지 해야한다
             # similarlist = similarAnalysis(audio.name)
@@ -131,13 +143,13 @@ def search(request):
             context['audio'] = audio
             # audio 파일을 모델 함수에 입력 아웃풋 lagel값
             file_path = f"media/upload_music/{audio}"
-            label = label_type(file_path) # 모델활용
-            # label = 'Telephone' #확인용
+            # label = label_type(file_path) # 모델활용
+            label = 'Telephone' #확인용
             context['label'] = label
 
-            mood = mood_type(file_path)
-            # mood = 'test' #확인용
-            context['mood'] = mood #모델활용
+            # mood = mood_type(file_path)#모델활용
+            mood = '슬픔' #확인용
+            context['mood'] = mood 
 
             # 파일을 지우기 전에 유사도 분석까지 해야한다
             similarlist = similarAnalysis(audio.name) 
@@ -209,12 +221,14 @@ def search(request):
     # if label: #키워드 검색이 아니고 파일검색에서 라벨을 입력(?)받았을때
     #     kw = label 
 
-    if kw != '' : # 키워드 검색 파일명이나 라벨명으로 검색
+    if kw != '' : # 키워드 검색 : 파일명or라벨명or분위기로 검색
         music_list = music_list.filter(
-            Q(fname__contains=kw) | Q(label__contains=kw)
-        )#.distinct()
+            Q(fname__contains=kw) | Q(label__contains=kw) | Q(mood__contains=kw)
+        ).distinct()
     elif label: #kw가 ''인데 label 값이 있을경우 label로 검색
         music_list = music_list.filter(label__contains=label)#.distinct()
+        if mood:
+            music_list = music_list.filter(mood__contains=mood)#.distinct()
     else:
         #kw가 ''이고 label값도 없을경우 => 키워드검색, 키워드 입력안함 => 전체 
         pass
