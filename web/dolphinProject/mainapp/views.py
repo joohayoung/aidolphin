@@ -265,5 +265,5 @@ def search(request):
             music_list = music_list.exclude(licenses__contains='Derivative Works')
 
     print('라이센스필터링 완료')
-    context['music_list'] = music_list
+    context['music_list'] = music_list[:20]
     return render(request, 'mainapp/search.html', context)
