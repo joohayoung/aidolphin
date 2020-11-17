@@ -8,7 +8,6 @@ body{
 #nav{
     /* border: solid green; */
     margin-top: 10px;
-    padding-left: 10px;
     width: 100%;
     position: absolute;
     top: 0;
@@ -52,6 +51,7 @@ li a{
     width: 200px;
     height: auto;
     margin-top: 5px;
+    margin-left: 10px;
 }
 
 #container{
