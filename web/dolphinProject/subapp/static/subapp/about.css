@@ -1,19 +1,23 @@
 html {
     scroll-behavior: smooth;
 }
-  
-
 #title{
     text-align: center;
 }
 #info{
     color: white;
     text-align: center;
-    padding-top: 453px;
-    padding-bottom: 453px;
+    padding-top: 360px;
+    padding-bottom: 500px;
 }
-
+h1{
+    font-size: 50px;
+}
 #info_img{
     position: absolute;
     z-index: -1;
+}
+#nav{
+    width: 100%;
+    background-color: white;
 }

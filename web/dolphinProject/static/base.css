@@ -8,8 +8,8 @@ body{
 #nav{
     /* border: solid green; */
     margin-top: 10px;
-    margin-left: 10px;
-    width: 95%;
+    padding-left: 10px;
+    width: 100%;
     position: absolute;
     top: 0;
 }
