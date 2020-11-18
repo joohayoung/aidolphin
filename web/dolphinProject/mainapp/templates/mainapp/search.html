@@ -25,15 +25,15 @@
                 <br>
                 <div class='space_around_ct'>
                     <button id='option_bt' type="reset">초기화</button>
-                    <button id='option_bt' type="submit"{% if search_type == 'filesearch' %}disabled {% endif %}>
-                    <!--<button id='option_bt' type="submit"> -->
+                    <!--<button id='option_bt' type="submit"{% if search_type == 'filesearch' %}disabled {% endif %}> -->
+                    <button id='option_bt' type="submit">
                     적용</button>
                     <input type="hidden" name='kw' value="{{ kw|default_if_none:'' }}">
                     <input type="hidden" name='label' value="{{ label|default_if_none:'' }}">
                     <input type="hidden" name='audio' value="{{ audio|default_if_none:'' }}">
                     <input type="hidden" name='mood' value="{{ mood|default_if_none:'' }}">
                     <input type="hidden" name="search_type" value="{{ search_type|default_if_none:'' }}">
-                    <!--<input type="hidden" name="similarlist" value="{{similarlist|default_if_none:''}}">-->
+                    <input type="hidden" name="similarlist" value="{{similarlist|default_if_none:''}}">
                 </div>
 
                 <h4>저작권</h4>

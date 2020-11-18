@@ -83,7 +83,7 @@
 }
 
 .search_option button, #submit, #file_box{
-    display: none;
+    /* display: none; */
 }
 
 #search_option_ct{
