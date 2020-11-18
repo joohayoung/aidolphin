@@ -12,7 +12,7 @@
     </div>
     {% endif %}
 
-    <div id='login_box'>
+    <div id='login_box' style="margin:100px;">
         <form action="{% url 'accountapp:sign_up' %}" method="POST">
             {% csrf_token %}
             <h3>sign up</h3>

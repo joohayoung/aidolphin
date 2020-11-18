@@ -1,5 +1,5 @@
 from django.shortcuts import render,get_object_or_404,redirect
-from mainapp.models import MusicDB,Comment
+from mainapp.models import MusicDB,Comment,Profile,User
 from django.db.models import Q, Count
 from mainapp.forms import CommentForm
 from django.contrib import messages
@@ -110,3 +110,11 @@ def mypage(request):
 def test(request):
     # app별로 html파일이 있기때문에 " 앱이름/~.html " 로 경로지정해야함!
     return render(request, 'subapp/test.html')
+
+@login_required
+def profile(request, username):
+    user = get_object_or_404(User, username=username)
+    profile = get_object_or_404(Profile, user=user)
+    musicdb = MusicDB.objects.filter(author=user)
+    follow = profile.follow.all()
+    return render(request,'subapp/profile.html', {'profile': profile, 'user': user, 'musicdb':musicdb,'follow':follow})

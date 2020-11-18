@@ -5,8 +5,8 @@ from django.http import HttpResponse
 import json
 from django.contrib.auth.decorators import login_required
 from similarModel.similarmodel import similarAnalysis
-from model.type_predictor import label_type #라벨 분류
-from model.mood_predictor import mood_type #분위기 분류
+#from model.type_predictor import label_type #라벨 분류
+#from model.mood_predictor import mood_type #분위기 분류
 
 # Create your views here.
 
@@ -37,8 +37,8 @@ def upload(request):
                 label = request.POST.get('label_')
             else:
                 file_path = f"media/music_sample/{audio}"
-                # label = 'Telephone' #확인용
-                label = label_type(file_path)#모델이용하기
+                label = 'Telephone' #확인용
+                #label = label_type(file_path)#모델이용하기
 
             #분위기 종류
             mood = request.POST.get('mood')
@@ -46,8 +46,8 @@ def upload(request):
                 label = request.POST.get('mood_')
             else:
                 file_path = f"media/music_sample/{audio}"
-                # mood = '슬픔' #확인용
-                mood = mood_type(file_path)#모델이용하기
+                mood = '슬픔' #확인용
+                #mood = mood_type(file_path)#모델이용하기
             #라이센스 
             licenses = request.POST.get('license')
             # 업로더?

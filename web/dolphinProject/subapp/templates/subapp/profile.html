@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'subapp/detail.css' %}"> 
+{% endblock %}
+
+<!-- body 부분에 들어갈 내용 -->
+{% block content %}
+<div id='login_box' style="margin:100px;">
+     <h1>My Page<h1>
+    {% if user.profile.image %}
+        <img src="{{ MEDIA_URL }}{{ user.profile.image.url }}" alt="{{ user.username }}">
+        {% else %}
+        <img src="{% static 'default.png' %}" alt="{{ user.username }}">
+        {% endif %}
+
+        <div class="card-body col-9">
+          <h2 class="card-title my-3">이름: {{ user.username }}</h2>
+        {% if user.profile.about_me %}
+          <p class="card-text">내 소개: {{ user.profile.about_me }}</p>
+        {% else %}
+          <p>내 소개: 소개글을 작성해주세요</p>
+        {% endif %}
+        </div>
+
+        
+        ________________________________________________<br>
+        내가 업로드한 음향: 
+        {% for music in musicdb %}
+        <table style="border: 1px solid red;">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Lable</th>
+              <th>License</th>
+              <th>Like</th>
+              <th>Download</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ music.fname }}</td>
+              <td>{{ music.label }}</td>
+              <td>{{ music.licenses }}</td>
+              <td>{{ music.like.count }}</td>
+              <td>{{ music.downloads }}</td>
+              <td>{{ music.date }}</td>
+            </tr>
+          </tbody>
+        </table>
+        {% endfor %}
+      
+      ________________________________________________<br>
+        팔로우 :{{ user.profile.follow.count}}
+        {%for follow in follow%}
+          <p>{{follow}}</p>
+        {%endfor%}
+</div>
+{% endblock %}

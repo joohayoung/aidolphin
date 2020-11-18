@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import auth
+from mainapp.models import Profile
 
 # Create your views here.
 
@@ -18,6 +19,7 @@ def sign_up(request):
                 username = username,
                 password = password,
             )
+            Profile.objects.create(user=new_user)
             # 로그인후 home을 redirect
             auth.login(request, new_user)
             return redirect('mainapp:home')
