@@ -47,3 +47,14 @@ class UserMusicDB(models.Model):
     def delete(self, *args, **kwargs):
         super(UserMusicDB, self).delete(*args, **kwargs)
         os.remove(os.path.join(settings.MEDIA_ROOT, self.audio.path))
+
+
+#--------------------------------------------------#
+class Profile(models.Model):
+    about_me = models.TextField()
+    image = models.ImageField(upload_to='profile', null=True, blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    follow= models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='follow',blank=True)
+
+    def __str__(self):
+        return self.user.username

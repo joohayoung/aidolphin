@@ -22,7 +22,7 @@
                 
                 {% if user.is_authenticated %}
                 <!-- 로그인 한 사용자 -->
-                    <li>My Page</li>
+                    <li><a href="{% url 'subapp:profile' request.user.username %}">My Page</a></li>
                     <li>
                         <form action="{% url 'accountapp:logout' %}" method="POST">
                             {% csrf_token %}
