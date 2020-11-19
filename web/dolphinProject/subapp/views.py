@@ -128,7 +128,7 @@ def profile(request, username):
     context['profile'] = profile
     musicdb = MusicDB.objects.filter(author=user)
     follow = profile.follow.all()
-    context['follow'] = follow
+    context['follows'] = follow
     #뮤직DB정렬
     if sort == "like":
         musicdb = musicdb.annotate(num_like=Count('like')).order_by('-num_like','-date')
