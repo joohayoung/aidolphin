@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'mainapp/search.css' %}"> 
+{% endblock %}
+{% comment %} <head>
+    
+    <script src="//cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.4.0/wavesurfer.min.js"></script>
+    <script>
+        window.onload = function(){
+            var wavesurfer = WaveSurfer.create({
+            // id="waveform" 인 오브젝트에 파형 생성
+            // 필수 옵션
+            container: '#waveform',
+            // 선택 옵션들 
+            waveColor: 'violet',
+            progressColor: 'purple'
+            });
+        }
+    </script>
+
+</head> {% endcomment %}
+
+
+{% block content %}
+    <div id='search_container'>
+        <!-- 조건선택 -->
+        <div id ="option_container">
+            <form action="{% url 'mainapp:search' %}"search_container method="GET" name="option">
+                {% csrf_token %}
+                <h3>상세조건</h3>
+                저작권 :
+                <!---->
+                {% if license == 'all' %}
+                    all<br>
+                {% else %}
+                    {%if 'author' in license%}저적자 표기안함,<br> {%else%}저작자옵션 없음,<br>{% endif %}
+                    {%if 'commercial' in license%}상업적이용가능,<br> {% else %}상업적이용옵션 없음,<br>{% endif %}
+                    {%if 'work' in license%}변경가능<br>{% else %}변경옵션없음<br>{% endif %}<br>
+                {% endif %}
+                정렬기준 : {{ sort }} <br>
+                <br>
+                <div class='space_around_ct'>
+                    <button id='option_bt' type="reset">초기화</button>
+                    <button id='option_bt' type="submit"{% if search_type == 'filesearch' %}disabled {% endif %}>
+                    <!--<button id='option_bt' type="submit"> -->
+                    적용</button>
+                    <input type="hidden" name='kw' value="{{ kw|default_if_none:'' }}">
+                    <input type="hidden" name='label' value="{{ label|default_if_none:'' }}">
+                    <input type="hidden" name='audio' value="{{ audio|default_if_none:'' }}">
+                    <input type="hidden" name="search_type" value="{{ search_type|default_if_none:'' }}">
+                    <!--<input type="hidden" name="similarlist" value="{{similarlist|default_if_none:''}}">-->
+                </div>
+
+                <h4>저작권</h4>
+                <input type="checkbox" name="license[]" value="all"id="all" {% if license == 'all' %}checked{% endif %} >
+                <label for="all">전체</label><br>
+                <input type="checkbox" name="license[]" value="author"id="author" {% if 'author' in license %}checked{% endif %}>
+                <label for="author">저작자표기안함</label><br>
+                <input type="checkbox" name="license[]" value="commercial"id="commercial" {% if 'commercial' in license %}checked{% endif %}>
+                <label for="commercial">상업적이용가능</label><br>
+                <input type="checkbox" name="license[]" value="work"id="work" {% if 'work' in license %}checked{% endif %}>
+                <label for="work">변경가능</label><br>
+                
+                <h4>정렬기준</h4>
+                <input type="radio" name="sort" {% if sort == 'similar' %}checked{% endif %} value="similar"id="similar">
+                <label for="similar">유사도(기본)</label>
+                <input type="radio" name="sort" {% if sort == 'download' %}checked{% endif %} value="download"id="download">
+                <label for="download">다운 많은 순</label><br>
+                <input type="radio" name="sort" {% if sort == 'like' %}checked{% endif %} value="like"id="like">
+                <label for="like">좋아요 많은 순</label><br>
+                <input type="radio" name="sort" {% if sort == 'recent' %}checked{% endif %} value="recent"id="recent">
+                <label for="recent">최신순</label>
+            </form>
+        </div>
+        
+        <!-- 결과 -->
+        <div id='result'>
+            <h3>show result </h3>
+            <!-- <div>{{search_type}}, {{name_list}}, </div> -->
+            <p>
+                {% if label %}
+                입력파일명 : {{audio}}<br>
+                분석결과 : {{label}}<br>
+                파형 : (예시.png 또는 그래프 추가 등...)<br>
+
+                {% else %}
+                You have searched for : {{ kw }}<br>
+                <!-- 파형을 그릴 div 생성-->
+                <div id="waveform"></div>
+                
+                <!-- Wavesurfer 오픈소스 설치 -->
+                <script src="//cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.4.0/wavesurfer.min.js"></script>
+                {% comment %} <script src="https://unpkg.com/wavesurfer.js"></script> {% endcomment %}
+
+                <script type="text/javascript">
+                    var wavesurfer = WaveSurfer.create({
+                    // id="result" 인 오브젝트에 파형 생성
+                    // 필수 옵션
+                    container: '#waveform',
+                    // 선택 옵션들 
+                    waveColor: 'violet',
+                    progressColor: 'purple'
+                    //backend: 'MediaElement'
+                    });
+                </script>
+                <!-- load함수에는 음악 오브젝트를 넘겨줘야하는데.. 어떡하지 !!! -->
+                <!-- 오브젝트로 만들어주기??-->
+                
+                <script>wavesurfer.load('/media/music_sample/TearingWav.wav');</script>
+                {% endif %}
+            </p>
+
+
+
+            <!-- 음향리스트 -->
+            {% for music in music_list %}
+                <div>
+                    <h4><a href="/../subapp/{{music.pk}}">{{music.fname}}</a></h4>
+                    <!-- 확인용으로 정보 다 집어넣음 나중에 생략할거 생략하기 -->
+
+                    <!-- 수정 시작-->
+                    {{music.fname}}<br>  
+
+                    <!-- 수정 끝-->
+                    category : {{music.label}} | license : {{music.licenses}} <br>
+                    like : {{music.like.count}} | download : {{music.downloads}} <br>
+                    date : {{music.date}} <br>
+                    <audio src='/media/music_sample/{{music.fname}}#t=,10' controls controlsList="nodownload">해당 브라우저는 오디오 태그를 지원하지 않습니다.</audio>
+                </div>
+
+               
+               
+            {% empty %}
+                <div>
+                    0 result found.
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
