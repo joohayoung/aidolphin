@@ -81,9 +81,11 @@ if (navigator.mediaDevices) {
                 clipContainer.classList.add('clip');
                 audio.setAttribute('controls', '');
                 deleteButton.innerHTML = "삭제";
-                submitButton.innerHTML = "확인(등록?)적당한 이름짓기";
+                submitButton.innerHTML = "등록";
                 clipLabel.innerHTML = clipName;
                 submitButton.setAttribute('type', 'submit')//제출버튼 속성추가
+                submitButton.setAttribute('class', 'rt_button')
+                deleteButton.setAttribute('class', 'rt_button')
 
                 clipContainer.appendChild(audio);
                 clipContainer.appendChild(clipLabel);
