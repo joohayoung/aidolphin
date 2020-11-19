@@ -15,10 +15,14 @@ def detail(request,MusicDB_id):
     comment_form = CommentForm()
     comments = music.comments.all()
     #comments=Comment.objects.all()
+    user=get_object_or_404(User, username=music.author)
+    profile = get_object_or_404(Profile, user=music.author)
     context = {
         'music':music,
         'comment_form': comment_form,
         'comments':comments,
+        'profile':profile,
+        'user':user,
     }
     return render(request,'subapp/detail.html',context)
 
@@ -128,7 +132,7 @@ def profile(request, username):
     context['profile'] = profile
     musicdb = MusicDB.objects.filter(author=user)
     follow = profile.follow.all()
-    context['follow'] = follow
+    context['follows'] = follow
     #뮤직DB정렬
     if sort == "like":
         musicdb = musicdb.annotate(num_like=Count('like')).order_by('-num_like','-date')

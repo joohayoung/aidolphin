@@ -122,7 +122,20 @@
             <div id='uploader'>
                 <h2>Uploader</h2>
                 <!--<img src="{% static 'image/userprofile.png' %}">-->
+                <!--업로더 이미지-->
+                {% if user.profile.image %}
+                <img src="{{ MEDIA_URL }}{{ user.profile.image.url }}" alt="{{ user.username }}" style="width:250px;">
+                {% else %}
+                <img src="{% static 'default.png' %}" alt="{{ user.username }}">
+                {% endif %}
                 <h2>{% if music.author %}<a href="/subapp/profile/{{music.author}}">{{music.author}}</a>{% else %}unknown{% endif %} </h2>
+                <!--업로더 소개글-->
+                {% if user.profile.about_me %}
+                <p class="card-text">소개글: {{ user.profile.about_me }}</p>
+                {% else %}
+                <p>소개글: 소개글을 작성해주세요</p>
+                {% endif %}
+                Member joined: {{user.date_joined | date:'Y.m.d'}}
             </div>
         </div>
     </div>
