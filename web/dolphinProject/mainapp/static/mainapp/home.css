@@ -83,7 +83,7 @@
 }
 
 .search_option button, #submit, #file_box{
-    /* display: none; */
+    display: none;
 }
 
 #search_option_ct{
@@ -91,4 +91,16 @@
     margin-top: 40px;
     display: flex;
     flex-direction: row;
+}
+
+#bottom{
+    /* border: solid yellow; */
+    margin-top: 100px;
+    margin-bottom: 100px;
+    font-weight: 100;
+    position: absolute;
+    bottom: 20px;
+    width: 50%;
+    left: 25%;
+    text-align: center;
 }
