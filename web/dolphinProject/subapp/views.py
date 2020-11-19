@@ -4,6 +4,7 @@ from django.db.models import Q, Count
 from mainapp.forms import CommentForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+import math
 # Create your views here.
 
 def about(request):
@@ -113,11 +114,48 @@ def test(request):
 
 # @login_required
 def profile(request, username):
+    context={}
+    # 옵션값 가져오기
+    sort = request.GET.get('sort', 'recent')
+    context['sort'] = sort
+    page = int(request.GET.get('page', 1))
+    context['page'] = page
+    paginated_by = 20
+    #객체들 가져오기
     user = get_object_or_404(User, username=username)
+    context['user'] = user
     profile = get_object_or_404(Profile, user=user)
-    musicdb = MusicDB.objects.filter(author=user)[:20]
+    context['profile'] = profile
+    musicdb = MusicDB.objects.filter(author=user)
     follow = profile.follow.all()
-    return render(request,'subapp/profile.html', {'profile': profile, 'user': user, 'musicdb':musicdb,'follow':follow})
+    context['follow'] = follow
+    #뮤직DB정렬
+    if sort == "like":
+        musicdb = musicdb.annotate(num_like=Count('like')).order_by('-num_like','-date')
+    elif sort == "downloads":
+        musicdb = musicdb.order_by('-downloads', '-date')
+    else : #recent:
+        musicdb = musicdb.order_by('-date')
+    #페이징
+    start_idx = paginated_by * (page-1)
+    end_idx = paginated_by * page
+    total_count = musicdb.count()
+
+    musicdb = musicdb[start_idx:end_idx]
+    context['musicdb'] = musicdb
+
+    total_page = math.ceil( total_count / paginated_by) 
+    if page == 1 or page==2 or page==3: #첫페이지일때
+        page_range = range(2, 7)
+    elif page == total_page or page == total_page -1 or page == total_page -2 : #마지막 페이지 일때
+        page_range = range(total_page-5, total_page)
+    else:
+        page_range = range(page-2, page+3)
+    
+    context['totalpage'] = total_page
+    context['page_range'] = page_range
+
+    return render(request,'subapp/profile.html', context)
 
 @login_required(login_url='/accountapp/login')
 def follow(request, username):
