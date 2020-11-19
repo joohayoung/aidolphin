@@ -31,18 +31,18 @@
                 <li><a href="{% url 'subapp:about' %}">About</a></li>
                 <li><a href="{% url 'mainapp:search' %}">Search</a></li>
                 <li><a href="{% url 'subapp:about' %}">Features</a></li>
-                <li><a href="{% url 'subapp:about' %}">FAQ</a></li>                
+                {% comment %} <li><a href="{% url 'subapp:about' %}">FAQ</a></li>                 {% endcomment %}
                 {% if user.is_authenticated %}
                 <!-- 로그인 한 사용자 -->
                     <li><a href="/subapp/profile/{{request.user.username}}">My Page</a></li>
+                    <li><a href="{% url 'mainapp:upload' %}">Upload</a></li>
                     <li>
                         <form action="{% url 'accountapp:logout' %}" method="POST">
                             {% csrf_token %}
                             <input type="hidden" name="path" value="{{request.path}}">
-                            <button type = submit>Log-Out</button>
+                            <button id='logout' type = submit>Log-Out</button>
                         </form>
                     </li>
-                    <li><a href="{% url 'mainapp:upload' %}">Upload</a></li>
                 {% else %}
                     <!-- 로그인하지 않은 사용자 -->
                      <!-- <li><a href="{% url 'accountapp:login' %}">Log-In</a></li> -->
