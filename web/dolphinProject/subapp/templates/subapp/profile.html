@@ -99,7 +99,7 @@
             {%endfor%}
           </div>
           <!--follow 버튼-->
-          {% if user in follow.all %}
+          {% if request.user in follows.all %}
               <form action="{% url 'subapp:follow' user.username %}" method="POST">
                   {% csrf_token %}
                   <button type="submit">Unfollow</button>

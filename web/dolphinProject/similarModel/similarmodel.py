@@ -110,8 +110,22 @@ def music_search(file):
 
     # 값(value)을 기준으로 오름차순 정렬
     sorted(filter_dict.items(), key=lambda x:x[1])
+
+    # 3차 필터링
+    # 해당 딕셔너리에 서로 똑같은 value값이 있다면 제외( 똑같은 음향파일을 중복해서 추천해주는 경우 제외 )
+    dict_len=len(filter_dict)
+    list_del=[]
     
-    # 유사한 음향 5개 반환
+    for idx, (key,element) in enumerate(filter_dict.items()):
+        for sub_idx in range(idx+1, dict_len):
+            if(element == list(filter_dict.values())[sub_idx]):
+                list_del.append(list(filter_dict.keys())[sub_idx])
+                
+    if(list_del):# 비어있지않다면 실행
+        for d in list_del:
+            del filter_dict[d]
+    
+    # 유사한 음향 500개 반환
     result=[]
     cnt=0
     for key in filter_dict.keys():
