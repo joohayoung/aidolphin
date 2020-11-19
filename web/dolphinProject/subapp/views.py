@@ -21,7 +21,7 @@ def detail(request,MusicDB_id):
     }
     return render(request,'subapp/detail.html',context)
 
-@login_required
+@login_required(login_url='/accountapp/login')
 def like(request,pk):
     musicdb = get_object_or_404(MusicDB, pk=pk)
     
@@ -33,7 +33,7 @@ def like(request,pk):
         
     return redirect('subapp:detail', musicdb.pk)
 
-@login_required
+@login_required(login_url='/accountapp/login')
 def comments_new(request, music_pk): #POST 
     # 1. 요청이 POST 인지 점검
     if request.method  == 'POST': 
@@ -51,7 +51,7 @@ def comments_new(request, music_pk): #POST
     # 5. 생성된 댓글을 확인할 수 있는 곳으로 안내 
     return redirect('subapp:detail', music_pk)
 
-@login_required
+@login_required(login_url='/accountapp/login')
 def comments_delete(request, music_pk, pk): # POST 
     # 0. 요청이 POST인지 점검 
     if request.method == 'POST':
@@ -63,7 +63,7 @@ def comments_delete(request, music_pk, pk): # POST
     
     return redirect('subapp:detail', music_pk)
     
-@login_required
+@login_required(login_url='/accountapp/login')
 def comments_edit(request,music_pk, pk): # GET , POST 
     # Database에서 수정하려 하는 data 가져오기 
     comment = Comment.objects.get(pk=pk)
@@ -111,10 +111,29 @@ def test(request):
     # app별로 html파일이 있기때문에 " 앱이름/~.html " 로 경로지정해야함!
     return render(request, 'subapp/test.html')
 
-@login_required
+# @login_required
 def profile(request, username):
     user = get_object_or_404(User, username=username)
     profile = get_object_or_404(Profile, user=user)
-    musicdb = MusicDB.objects.filter(author=user)
+    musicdb = MusicDB.objects.filter(author=user)[:20]
     follow = profile.follow.all()
     return render(request,'subapp/profile.html', {'profile': profile, 'user': user, 'musicdb':musicdb,'follow':follow})
+
+@login_required(login_url='/accountapp/login')
+def follow(request, username):
+    if request.method == 'POST':
+        try:
+            user = get_object_or_404(User, username=username)
+            profile = get_object_or_404(Profile, user=user)
+
+            if request.user in profile.follow.all():
+                profile.follow.remove(request.user)
+            else:
+                profile.follow.add(request.user)
+
+            return redirect('subapp:profile', username)
+        
+        except Profile.DoesNotExist:
+            pass
+
+    return redirect('mainapp:home')

@@ -17,5 +17,6 @@ urlpatterns = [
     path('downloads', views.downloads, name='downloads'),
     path('profile/<username>/', views.profile, name='profile'),
     path('test/', views.test, name='test'), #127.0.0.1:8000/subapp/test
+    path('<username>/follow/', views.follow, name='follow'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
