@@ -33,7 +33,7 @@
             <!--music info-->
             <div>
                 fname: {{music.fname}} <br>
-                author:{% if music.author %}<a href="">{{music.author}}</a>{% else %}unknown{% endif %} <br> <!--마이페이지(업로더페이지)링크 달기-->
+                author:{% if music.author %}{{music.real_author}}{% else %}unknown{% endif %} <br> <!--마이페이지(업로더페이지)링크 달기-->
                 label: {{music.label}} <br>
                 mood : {{music.mood}}<br>
                 licenses: {{music.licenses}} <br>
@@ -122,7 +122,7 @@
             <div id='uploader'>
                 <h2>Uploader</h2>
                 <!--<img src="{% static 'image/userprofile.png' %}">-->
-                <h2>{% if music.author %}<a href="">{{music.author}}</a>{% else %}unknown{% endif %} </h2>
+                <h2>{% if music.author %}<a href="/subapp/profile/{{music.author}}">{{music.author}}</a>{% else %}unknown{% endif %} </h2>
             </div>
         </div>
     </div>
