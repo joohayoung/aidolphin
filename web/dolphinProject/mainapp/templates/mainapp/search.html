@@ -63,9 +63,39 @@
                             Reset
                         </button>
                         <!--<button id='option_bt' type="submit"{% if search_type == 'filesearch' %}disabled {% endif %}> -->
-                        <button id='option_bt' type="submit">
+                        <button id='option_bt' type="submit" name="page" value="{{page|default_if_none:1}}">
                             Apply
                         </button>    
+                    </div>
+                    <!--키워드 검색일 경우 페이지번호-->
+                    <div>
+                    {%if search_type == "keyword"%}
+                        <ul>
+                            <!--1페이지 고정-->
+                            <!--<input type="hidden" name="page" value=1>-->
+                            {% if page == 1 %}
+                            <li><button type="submit" name="page" value=1 >"처음"</button></li>
+                            {% else %}
+                            <li><button type="submit"  name="page" value=1>처음</button></li>
+                            {% endif %}
+                            <!--중간 앞 뒤 5개-->
+                            {% for pager in page_range %}
+                                <!--<input type="hidden" name="page" value="{{pager|default_if_none:1}}">-->
+                                {% if pager == page %}
+                                <li><button type="submit" name="page" value="{{pager|default_if_none:1}}">"{{pager}}"</button></li>
+                                {%else%}
+                                <li><button type="submit" name="page" value="{{pager|default_if_none:1}}">{{pager}}</button></li>
+                                {%endif%}
+                            {% endfor %}
+                            <!--마지막 페이지 고정-->
+                            <!--<input type="hidden" name="page" value="{{totalpage|default_if_none:1}}">-->
+                            {%if page == totalpage %}
+                            <li><button type="submit" name="page" value="{{totalpage|default_if_none:1}}">"마지막"</button></li>
+                            {% else %}
+                            <li><button type="submit" name="page" value="{{totalpage|default_if_none:1}}">마지막</button></li>
+                            {% endif %}
+                        </ul>
+                        {%endif%}
                     </div>                
                 </form>
             </div>
@@ -102,52 +132,7 @@
                     </div>
                 {% endfor %}
             </div>
-            <!--키워드 검색일 경우 페이지번호-->
-            {%if search_type == "keyword"%}
-            <div>
-                <ul>
-                     <!--1페이지 고정-->
-                    <form action="{% url 'mainapp:search' %}" method="GET">
-                        {%csrf_token%}
-                        <input type="hidden" name='kw' value="{{ kw|default_if_none:'' }}">
-                        <input type="hidden" name="search_type" value="{{ search_type|default_if_none:'' }}">
-                        <input type="hidden" name="page" value=1>
-                        {% if page == 1 %}
-                        <li><button type="submit">"처음"</button></li>
-                        {% else %}
-                        <li><button type="submit">처음</button></li>
-                        {% endif %}
-                    </form>
-                    <!--중간 앞 뒤 5개-->
-                    {% for pager in page_range %}
-                     <form action="{% url 'mainapp:search' %}" method="GET">
-                        {%csrf_token%}
-                        <input type="hidden" name='kw' value="{{ kw|default_if_none:'' }}">
-                        <input type="hidden" name="search_type" value="{{ search_type|default_if_none:'' }}">
-                        <input type="hidden" name="page" value="{{pager|default_if_none:1}}">
-                        {% if pager == page %}
-                        <li><button type="submit">"{{pager}}"</button></li>
-                        {%else%}
-                        <li><button type="submit">{{pager}}</button></li>
-                        {%endif%}
-                        </form>
-                    {% endfor %}
-                    
-                    <!--마지막 페이지 고정-->
-                    <form action="{% url 'mainapp:search' %}" method="GET">
-                        {%csrf_token%}
-                        <input type="hidden" name='kw' value="{{ kw|default_if_none:'' }}">
-                        <input type="hidden" name="search_type" value="{{ search_type|default_if_none:'' }}">
-                        <input type="hidden" name="page" value="{{totalpage|default_if_none:1}}">
-                        {%if page == totalpage %}
-                        <li><button type="submit">"마지막"</button></li>
-                        {% else %}
-                        <li><button type="submit">마지막</button></li>
-                        {% endif %}
-                    </form>
-                </ul>
-            </div>
-            {%endif%}
+            
         </div>
     </div>
 </div>
