@@ -121,6 +121,7 @@ if (navigator.mediaDevices) {
                     const labelinput = document.getElementById("label_input");
                     const similarlistinput = document.getElementById("similarlist_input");
                     const moodinput = document.getElementById("mood_input");
+                    const filepathinput = document.getElementById("file_path_input");
 
                     // const response = fetch("{% url 'mainapp:realtime' %}", {method:"POST", headers:headers, redirect:'follow', body:fd})
                     const response = fetch("realtime/", {method:"POST", headers:headers, redirect:'follow', body:fd})
@@ -131,6 +132,7 @@ if (navigator.mediaDevices) {
                         labelinput.setAttribute('value', res['label']);
                         moodinput.setAttribute('value', res['mood']);
                         similarlistinput.setAttribute('value', res['similarlist']);
+                        filepathinput.setAttribute('value', res['file_path']);
                     })
                     .then(function(){
                         const realtime_search = document.getElementById("realtime_search");

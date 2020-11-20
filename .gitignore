@@ -13,3 +13,6 @@ music_sample/ #web
 
 #dolphinProject/db.splite3
 #**/db.sqlite3
+
+media/wave_image/
+wave_image/

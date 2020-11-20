@@ -2,7 +2,8 @@
 {% load static %}
 
 {% block style %}
-    <link rel="stylesheet" href="{% static 'mainapp/search.css' %}"> 
+    <link rel="stylesheet" href="{% static 'mainapp/search.css' %}">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.4.0/wavesurfer.min.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -32,6 +33,7 @@
                         <input type="hidden" name='kw' value="{{ kw|default_if_none:'' }}">
                         <input type="hidden" name='label' value="{{ label|default_if_none:'' }}">
                         <input type="hidden" name='audio' value="{{ audio|default_if_none:'' }}">
+                        <input type="hidden" name='file_path' value="{{ file_path|default_if_none:'' }}">
                         <input type="hidden" name='mood' value="{{ mood|default_if_none:'' }}">
                         <input type="hidden" name="search_type" value="{{ search_type|default_if_none:'' }}">
                         <input type="hidden" name="similarlist" value="{{similarlist|default_if_none:''}}">
@@ -79,7 +81,7 @@
                     {% if label %}
                     입력파일명 : {{audio}}<br>
                     분석결과 : {{label}}, {{mood}}<br>
-                    파형 : (예시.png 또는 그래프 추가 등...)<br>
+                    파형 : <div id="waveform"></div><br>
                     {% else %}
                     You have searched for " {{ kw }} "<br>
                     {% endif %}
@@ -100,7 +102,74 @@
                     </div>
                 {% endfor %}
             </div>
+            <!--키워드 검색일 경우 페이지번호-->
+            {%if search_type == "keyword"%}
+            <div>
+                <ul>
+                     <!--1페이지 고정-->
+                    <form action="{% url 'mainapp:search' %}" method="GET">
+                        {%csrf_token%}
+                        <input type="hidden" name='kw' value="{{ kw|default_if_none:'' }}">
+                        <input type="hidden" name="search_type" value="{{ search_type|default_if_none:'' }}">
+                        <input type="hidden" name="page" value=1>
+                        {% if page == 1 %}
+                        <li><button type="submit">"처음"</button></li>
+                        {% else %}
+                        <li><button type="submit">처음</button></li>
+                        {% endif %}
+                    </form>
+                    <!--중간 앞 뒤 5개-->
+                    {% for pager in page_range %}
+                     <form action="{% url 'mainapp:search' %}" method="GET">
+                        {%csrf_token%}
+                        <input type="hidden" name='kw' value="{{ kw|default_if_none:'' }}">
+                        <input type="hidden" name="search_type" value="{{ search_type|default_if_none:'' }}">
+                        <input type="hidden" name="page" value="{{pager|default_if_none:1}}">
+                        {% if pager == page %}
+                        <li><button type="submit">"{{pager}}"</button></li>
+                        {%else%}
+                        <li><button type="submit">{{pager}}</button></li>
+                        {%endif%}
+                        </form>
+                    {% endfor %}
+                    
+                    <!--마지막 페이지 고정-->
+                    <form action="{% url 'mainapp:search' %}" method="GET">
+                        {%csrf_token%}
+                        <input type="hidden" name='kw' value="{{ kw|default_if_none:'' }}">
+                        <input type="hidden" name="search_type" value="{{ search_type|default_if_none:'' }}">
+                        <input type="hidden" name="page" value="{{totalpage|default_if_none:1}}">
+                        {%if page == totalpage %}
+                        <li><button type="submit">"마지막"</button></li>
+                        {% else %}
+                        <li><button type="submit">마지막</button></li>
+                        {% endif %}
+                    </form>
+                </ul>
+            </div>
+            {%endif%}
         </div>
     </div>
 </div>
+<script>
+    {% comment %} function readFname(){
+        return String({{audio}});
+    }; {% endcomment %}
+
+    window.onload = function(){
+        //var fname = readFname();
+        //console.log(fname)
+        var filepath = `../{{file_path}}` ; //'/media/upload_music/' + fname;
+        console.log(filepath);
+        var wavesurfer = WaveSurfer.create({
+        // id="waveform" 인 오브젝트에 파형 생성
+        // 필수 옵션
+        container: '#waveform',
+        // 선택 옵션들 
+        waveColor: 'violet',
+        progressColor: 'purple'
+        });
+        wavesurfer.load(filepath);
+    };
+</script>
 {% endblock %}

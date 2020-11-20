@@ -18,7 +18,7 @@ class MusicDB(models.Model):
     def __str__(self):
         return f'{self.id}: {self.fname}'
 
-class UploadMusicDB(models.Model):
+class UploadMusicDB(models.Model): #실시간/파일검색 임시저장
     audio = models.FileField(upload_to='upload_music')
     # audio = models.FileField(blank=True, upload_to='upload_music/%Y/%m/%d')
 
@@ -38,7 +38,7 @@ class Comment(models.Model):
     date = models.DateTimeField(auto_now_add = True)
 
 
-class UserMusicDB(models.Model):
+class UserMusicDB(models.Model):#user가 서비스에 업로드한 데이터
     audio = models.FileField(upload_to='music_sample')
 
     def __str__(self):

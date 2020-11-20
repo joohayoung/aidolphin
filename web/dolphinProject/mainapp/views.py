@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from similarModel.similarmodel import similarAnalysis
 from model.type_predictor import label_type #라벨 분류
 from model.mood_predictor import mood_type #분위기 분류
+import math
 
 # Create your views here.
 
@@ -92,6 +93,7 @@ def realtime(request):
 
             # audio 파일을 모델 함수에 입력 아웃풋 lagel값
             file_path = f"media/upload_music/{audio}"
+            context['file_path'] = file_path
             label = label_type(file_path) # 모델활용
             # label = 'Telephone' #확인용
             context['label'] = label
@@ -122,7 +124,7 @@ def realtime(request):
             context['similarlist'] = name_list #similarlist
             #############################################################################
 
-            uploadfile.delete()
+            # uploadfile.delete()
         else:
             context['audio'] = 'audio_none'
             context['label'] = 'label_none'
@@ -153,6 +155,7 @@ def search(request):
             context['audio'] = audio
             # audio 파일을 모델 함수에 입력 아웃풋 lagel값
             file_path = f"media/upload_music/{audio}"
+            context['file_path'] = file_path
             label = label_type(file_path) # 모델활용
             # label = 'Telephone' #확인용
             context['label'] = label
@@ -182,7 +185,7 @@ def search(request):
             print("첫 파일검색 namelist : ", type(name_list), name_list)
 
             check = False        
-            uploadfile.delete()
+            # uploadfile.delete()
             
             search_type='filesearch'
             context['search_type'] = search_type
@@ -202,6 +205,8 @@ def search(request):
 
     if (search_type == 'filesearch') or (search_type == 'realtimesearch') :
         if check: #파일 두번째 검색 또는 실시간 검색
+            file_path = request.GET.get('file_path')
+            context['file_path'] = file_path
             name_list = request.GET.get('similarlist')
             context['similarlist'] = name_list
             if search_type == 'realtimesearch':
@@ -285,8 +290,28 @@ def search(request):
             # 변경가능 : cc0 / by-nc / by-sa / by-nc-sa / by
             # 변경불가능 : by-nd / by-nc-nd
             music_list = music_list.exclude(licenses__contains='Derivative Works')
-
     print('라이센스필터링 완료')
-    print(music_list)
-    context['music_list'] = music_list[:20]
+    # print(music_list)
+    # 키워드 검색 페이징
+    if search_type == 'keyword':
+        page = int(request.GET.get('page', 1))
+        context['page'] = page
+        paginated_by = 20
+        start_idx = paginated_by * (page -1)
+        end_idx = paginated_by * page
+        total_count = music_list.count()
+        context['music_list'] = music_list[start_idx:end_idx]
+
+        total_page = math.ceil(total_count / paginated_by)
+        if page == 1 or page==2 or page==3: #첫페이지일때
+            page_range = range(2, 7)
+        elif page == total_page or page == total_page -1 or page == total_page -2 : #마지막 페이지 일때
+            page_range = range(total_page-5, total_page)
+        else:
+            page_range = range(page-2, page+3)
+    
+        context['totalpage'] = total_page
+        context['page_range'] = page_range
+    else:
+        context['music_list'] = music_list[:20]
     return render(request, 'mainapp/search.html', context)
