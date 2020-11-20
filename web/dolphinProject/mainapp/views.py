@@ -8,6 +8,7 @@ from similarModel.similarmodel import similarAnalysis
 from model.type_predictor import label_type #라벨 분류
 from model.mood_predictor import mood_type #분위기 분류
 import math
+from model.UploadWaveImage import makeWaveimg
 
 # Create your views here.
 
@@ -32,12 +33,12 @@ def upload(request):
             else:
                 fname = audio.name
 
+            file_path = f"media/music_sample/{audio}"
             #라벨종류
             label = request.POST.get('label')
             if label == 'self':
                 label = request.POST.get('label_')
             else:
-                file_path = f"media/music_sample/{audio}"
                 # label = 'Telephone' #확인용
                 label = label_type(file_path)#모델이용하기
 
@@ -46,9 +47,12 @@ def upload(request):
             if label == 'self':
                 label = request.POST.get('mood_')
             else:
-                file_path = f"media/music_sample/{audio}"
                 # mood = '슬픔' #확인용
                 mood = mood_type(file_path)#모델이용하기
+
+            #파형이미지 저장
+            makeWaveimg(f'{audio}')
+
             #라이센스 
             licenses = request.POST.get('license')
             # 업로더?
@@ -89,7 +93,6 @@ def realtime(request):
             uploadfile = UploadMusicDB(audio=audio)
             uploadfile.save()
             context['audio'] = audio.name
-            # print('views.py realtime audioname : ', audio.name)
 
             # audio 파일을 모델 함수에 입력 아웃풋 lagel값
             file_path = f"media/upload_music/{audio}"
@@ -105,7 +108,6 @@ def realtime(request):
             
             # 파일을 지우기 전에 유사도 분석까지 해야한다
             similarlist = similarAnalysis(audio.name)
-            #############################################################################
             music_list = MusicDB.objects.filter(fname = similarlist[0])
             for name in similarlist[1:] :
                 item = MusicDB.objects.filter(fname = name)
@@ -122,7 +124,6 @@ def realtime(request):
                 name_list.append(item.fname)
             # context['name_list'] = name_list
             context['similarlist'] = name_list #similarlist
-            #############################################################################
 
             # uploadfile.delete()
         else:
@@ -175,12 +176,10 @@ def search(request):
             #라벨 (분위기?) 필터링
             music_list = music_list.filter(label__contains = label)
             # music_list = music_list.filter(mood__contains = mood)
-            # print("라벨 뮤직리스트 : ", music_list)
             name_list = []
             for item in music_list:
                 print("name_list : ", item.fname)
                 name_list.append(item.fname)
-            # context['name_list'] = name_list
             context['similarlist'] = name_list #similarlist 
             print("첫 파일검색 namelist : ", type(name_list), name_list)
 
@@ -214,17 +213,12 @@ def search(request):
             else:
                 new_name_list = list(name_list[1:-1].replace("'", "").replace(" ", "").split(','))
 
-            print("두번째 파일검색")
-            print(new_name_list)
-            print(type(new_name_list))
             music_list = MusicDB.objects.filter(fname = new_name_list[0])
-            print("첫번째 객체 : ", music_list)
             for name in new_name_list[1:] :
                 item = MusicDB.objects.filter(fname = name)
                 # music_list = music_list.union(item)
                 print(item)
                 music_list = music_list | item
-            print('여기 : ', music_list)
         else: #첫 파일 검색일 경우 
             pass
         print('파일/실시간 name_list 가져오기 완료')
@@ -242,7 +236,6 @@ def search(request):
             music_list = music_list.order_by('-date')
 
         print("파일/실시간 검색 sort 적용")
-        print(music_list)
         
     else: #키워드 검색일때 (+ 유사도 안되는 실시간)
         ## DB 불러와서 정렬하기
@@ -267,7 +260,6 @@ def search(request):
             ).distinct()
         
         print('키워드 검색 라벨 필터링 완료')
-    print(music_list)
     ## 라이센스 필터링
     licenses = request.GET.getlist('license[]', 'all')
     # print(licenses)
