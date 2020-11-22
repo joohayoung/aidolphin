@@ -86,6 +86,10 @@
     /* display: none; */
 }
 
+#record, #stop, #submit, #file_box{
+    display: none;
+}
+
 #search_option_ct{
     margin-left: 100px;
     margin-top: 40px;
