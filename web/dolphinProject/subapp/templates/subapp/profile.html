@@ -1,103 +1,105 @@
 {% extends 'base.html' %}
 {% load static %}
-
 {% block style %}
-    <link rel="stylesheet" href="{% static 'subapp/detail.css' %}">
+    <link rel="stylesheet" href="{% static 'subapp/profile.css' %}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 {% endblock %}
 
 <!-- body 부분에 들어갈 내용 -->
 {% block content %}
-  <div id='login_box' style="margin:100px;">
-      <h1>My Page</h1>
-      <!--프로필 이미지-->
-      <div>
-          {% if user.profile.image %}
-          <img src="{{ MEDIA_URL }}{{ user.profile.image.url }}" alt="{{ user.username }}">
-          {% else %}
-          <img src="{% static 'default.png' %}" alt="{{ user.username }}">
-          {% endif %}
+    <div id='main_ct'>
+        <h1>My Page</h1>
+        <!--프로필 이미지-->
+        <div>
+            {% if user.profile.image %}
+            <img id='profile_img' src="{{ MEDIA_URL }}{{ user.profile.image.url }}" alt="{{ user.username }}">
+            {% else %}
+            <img id='profile_img' src="{% static 'default.png' %}" alt="{{ user.username }}">
+            {% endif %}
         </div>
         <!--이름 및 자기소개-->
         <div class="card-body col-9">
-          <h2 class="card-title my-3">이름: {{ user.username }}</h2>
-          {% if user.profile.about_me %}
-            <p class="card-text">내 소개: {{ user.profile.about_me }}</p>
-          {% else %}
-            <p>내 소개: 소개글을 작성해주세요</p>
-          {% endif %}
+            <div id='user_name' class="card-title my-3">{{ user.username }}</div>
+            {% if user.profile.about_me %}
+                <p class="card-text">{{ user.profile.about_me }}</p>
+            {% else %}
+                <p>소개글을 작성해주세요</p>
+            {% endif %}
         </div>
-          _____________________________________________<br>
-          내가 업로드한 음향: 
-          <!--정렬 기준 선택-->
-          <div>
-            <form action="{% url 'subapp:profile' user.username %}" method="GET">
-              {% csrf_token %}
-              <input type="radio" name="sort" value="recent" id="recent"{% if sort == 'recent' %}checked{%endif%}><label for="recent">최신순</label>
-              <input type="radio" name="sort" value="downloads" id="downloads" {% if sort == 'downloads' %}checked{%endif%} ><label for="downloads">다운로드순</label>
-              <input type="radio" name="sort" value="like" id="like" {% if sort == 'like' %}checked{%endif%} ><label for="like">좋아요순</label>
-              <button type="submit">적용</button>
-            </form>
-          </div>
-          <!--정렬 결과-->
-          <table style="border: 1px solid red;">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Lable</th>
-                <th>License</th>
-                <th>Like</th>
-                <th>Download</th>
-                <th>Date</th>
-              </tr>
-            </thead>
-            <tbody>
-            {% for music in musicdb %}
-              <tr>
-                <td><a href="/subapp/{{music.pk}}">{{ music.fname }}</a></td>
-                <td>{{ music.label }}</td>
-                <td>{{ music.licenses }}</td>
-                <td>{{ music.like.count }}</td>
-                <td>{{ music.downloads }}</td>
-                <td>{{ music.date }}</td>
-              </tr>
-            {% endfor %}
-            </tbody>
-          </table>
-
-          <ul>
-          <!--1페이지 고정-->
-            {% if page == 1 %}
-            <li><a href="{% url "subapp:profile" user.username %}?page=1"><b>처음</b></a></li>
-            {% else %}
-            <li><a href="{% url "subapp:profile" user.username %}?page=1">처음</a></li>
-            {% endif %}
-          <!--중간 앞 뒤 5개-->
-            {% for pager in page_range %}
-              {% if pager == page %}
-              <li><a href="{% url "subapp:profile" user.username %}?page={{pager}}"><b>{{pager}}</b></a></li>
-              {%else%}
-              <li><a href="{% url "subapp:profile" user.username %}?page={{pager}}">{{pager}}</a></li>
-              {%endif%}
-            {% endfor %}
-          <!--마지막 페이지 고정-->
-            {%if page == totalpage %}
-            <li><a href="{% url "subapp:profile" user.username %}?page={{totalpage}}"><b>마지막</b></a></li>
-            {% else %}
-            <li><a href="{% url "subapp:profile" user.username %}?page={{totalpage}}">마지막</a></li>
-            {% endif %}
-          </ul>
-        <br>________________________________________________<br>
-        <div>
-          팔로워 :{{ user.profile.follow.count}} 명
-          > <a onclick = "follwMore()" id="more">팔로워 목록 보기</a>
-          <div id = "followList" style="display:none;" >
-            {%for follow in follows%}
-              <p>{{follow}}</p>
-            {%empty%}
-              <p>팔로워가 없습니다.</p>
-            {%endfor%}
-          </div>
+        <div id='user_data'>
+            _____________________________________________<br>
+            내가 업로드한 음향: 
+            <!--정렬 기준 선택-->
+            <div>
+                <form action="{% url 'subapp:profile' user.username %}" method="GET">
+                    {% csrf_token %}
+                    <input type="radio" name="sort" value="recent" id="recent"{% if sort == 'recent' %}checked{%endif%}><label for="recent">최신순</label>
+                    <input type="radio" name="sort" value="downloads" id="downloads" {% if sort == 'downloads' %}checked{%endif%} ><label for="downloads">다운로드순</label>
+                    <input type="radio" name="sort" value="like" id="like" {% if sort == 'like' %}checked{%endif%} ><label for="like">좋아요순</label>
+                    <button type="submit">적용</button>
+                </form>
+            </div>
+            <!--정렬 결과-->
+            <table style="border: 1px solid red;">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Lable</th>
+                        <th>License</th>
+                        <th>Like</th>
+                        <th>Download</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for music in musicdb %}
+                    <tr>
+                        <td><a href="/subapp/{{music.pk}}">{{ music.fname }}</a></td>
+                        <td>{{ music.label }}</td>
+                        <td>{{ music.licenses }}</td>
+                        <td>{{ music.like.count }}</td>
+                        <td>{{ music.downloads }}</td>
+                        <td>{{ music.date }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <ul>
+            <!--1페이지 고정-->
+                {% if page == 1 %}
+                <li><a href="{% url "subapp:profile" user.username %}?page=1"><b>처음</b></a></li>
+                {% else %}
+                <li><a href="{% url "subapp:profile" user.username %}?page=1">처음</a></li>
+                {% endif %}
+            <!--중간 앞 뒤 5개-->
+                {% for pager in page_range %}
+                    {% if pager == page %}
+                    <li><a href="{% url "subapp:profile" user.username %}?page={{pager}}"><b>{{pager}}</b></a></li>
+                    {%else%}
+                    <li><a href="{% url "subapp:profile" user.username %}?page={{pager}}">{{pager}}</a></li>
+                    {%endif%}
+                {% endfor %}
+            <!--마지막 페이지 고정-->
+              {%if page == totalpage %}
+              <li><a href="{% url "subapp:profile" user.username %}?page={{totalpage}}"><b>마지막</b></a></li>
+              {% else %}
+              <li><a href="{% url "subapp:profile" user.username %}?page={{totalpage}}">마지막</a></li>
+              {% endif %}
+            </ul>
+            <br>
+            <br>
+            ________________________________________________
+            <br>
+            <div>
+                팔로워 :{{ user.profile.follow.count}} 명
+                > <a onclick = "follwMore()" id="more">팔로워 목록 보기</a>
+                <div id = "followList" style="display:none;" >
+                    {%for follow in follows%}
+                        <p>{{follow}}</p>
+                    {%empty%}
+                        <p>팔로워가 없습니다.</p>
+                    {%endfor%}
+                </div>
           <!--follow 버튼-->
           {% if request.user in follows.all %}
               <form action="{% url 'subapp:follow' user.username %}" method="POST">
@@ -111,6 +113,7 @@
               </form>
           {% endif %}
         </div> 
+        </div>
   </div>
   <script>
     function follwMore(){

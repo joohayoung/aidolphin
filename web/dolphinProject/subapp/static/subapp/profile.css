@@ -1,0 +1,33 @@
+h1{
+    font-weight: 700;
+}
+
+#main_ct{
+    width: 90%;
+    margin-top: 130px;
+    margin-left: 5%;
+}
+
+#profile_img{
+    width: 10%;
+    margin-left: 45%;
+}
+
+#user_name{
+    font-weight: 700;
+    font-size: 40px;
+    width: 100%;
+    text-align: center;
+}
+
+p{
+    width: 100%;
+    text-align: center;
+    font-weight: 100;
+}
+#user_data{
+    display: flex;
+    width: 50%;
+    margin-left: 25%;
+    flex-flow: column;
+}
