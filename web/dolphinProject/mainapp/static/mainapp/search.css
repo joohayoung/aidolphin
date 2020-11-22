@@ -81,3 +81,22 @@ h4{
     width: fit-content;
     padding-bottom: 8px;
 }
+
+#page_num{
+    display: flex;
+    justify-content: center;
+    width: 700px;
+    font-weight: 300;
+    text-align: center;
+    position: relative;
+    top: 3720px;
+    left: 400px;
+}
+
+#page_num button{
+    background: none;
+    color: black;
+    width: fit-content;
+    margin: 0;
+    
+}

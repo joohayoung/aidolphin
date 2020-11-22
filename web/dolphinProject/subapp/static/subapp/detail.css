@@ -1,6 +1,8 @@
 #uploader{
     /* border: solid pink; */
     font-size: medium;
+    padding-top: 60px;
+    padding-left: 10px;
 }
 #main_ct{
     margin-top: 150px;
@@ -63,4 +65,11 @@ h3{
 #ccl_info{
     color: rgb(128, 128, 128);
     font-size: smaller;
+}
+
+#wave_img{
+    position: absolute;
+    width: 400px;
+    left: 600px;
+    top: 200px;
 }
