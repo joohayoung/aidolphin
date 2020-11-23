@@ -6,10 +6,12 @@
 {% endblock %}
 
 {% block content %}
-<h1> Comments Edit </h1>
-<form action="" method ="POST">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="댓글수정">
-</form>
+<div id='main_ct'>
+    <h1> Comments Edit </h1>
+    <form action="" method ="POST">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="댓글수정">
+    </form>
+</div>
 {% endblock %}
