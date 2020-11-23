@@ -27,7 +27,7 @@
             {% endif %}
         </div>
         <div id='user_data'>
-            _____________________________________________<br>
+            ________________________________________________<br>
             내가 업로드한 음향: 
             <!--정렬 기준 선택-->
             <div>
@@ -36,11 +36,11 @@
                     <input type="radio" name="sort" value="recent" id="recent"{% if sort == 'recent' %}checked{%endif%}><label for="recent">최신순</label>
                     <input type="radio" name="sort" value="downloads" id="downloads" {% if sort == 'downloads' %}checked{%endif%} ><label for="downloads">다운로드순</label>
                     <input type="radio" name="sort" value="like" id="like" {% if sort == 'like' %}checked{%endif%} ><label for="like">좋아요순</label>
-                    <button type="submit">적용</button>
+                    <button id='sort_bt' type="submit">적용</button>
                 </form>
             </div>
             <!--정렬 결과-->
-            <table style="border: 1px solid red;">
+            <table id='user_table'>
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -64,7 +64,7 @@
                 {% endfor %}
                 </tbody>
             </table>
-            <ul>
+            <ul id='paging'>
             <!--1페이지 고정-->
                 {% if page == 1 %}
                 <li><a href="{% url "subapp:profile" user.username %}?page=1"><b>처음</b></a></li>
@@ -86,10 +86,7 @@
               <li><a href="{% url "subapp:profile" user.username %}?page={{totalpage}}">마지막</a></li>
               {% endif %}
             </ul>
-            <br>
-            <br>
             ________________________________________________
-            <br>
             <div>
                 팔로워 :{{ user.profile.follow.count}} 명
                 > <a onclick = "follwMore()" id="more">팔로워 목록 보기</a>
@@ -104,17 +101,18 @@
           {% if request.user in follows.all %}
               <form action="{% url 'subapp:follow' user.username %}" method="POST">
                   {% csrf_token %}
-                  <button type="submit">Unfollow</button>
+                  <button id='follow_bt' type="submit">Unfollow</button>
               </form>
           {% else %}
               <form action="{% url 'subapp:follow' user.username %}" method="POST">
                   {% csrf_token %}
-                  <button type="submit" user.username >Follow</button>
+                  <button id='follow_bt' type="submit" user.username >Follow</button>
               </form>
           {% endif %}
         </div> 
         </div>
   </div>
+  <img id='profile_bg' src={% static 'subapp/image/profile_bg.png' %}>
   <script>
     function follwMore(){
       if(followList.style.display=='none'){

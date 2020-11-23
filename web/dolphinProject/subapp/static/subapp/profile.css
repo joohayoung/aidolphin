@@ -24,10 +24,61 @@ p{
     width: 100%;
     text-align: center;
     font-weight: 100;
+    margin-bottom: 0;
 }
 #user_data{
+    text-align: center;
     display: flex;
     width: 50%;
     margin-left: 25%;
     flex-flow: column;
+}
+
+#user_table{
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+    box-shadow: 0px 3px 6px 0.5;
+    border: none;
+    margin: 15px;
+}
+
+#sort_bt{
+    height: 30px;
+    width: 100px;
+    color: white;
+    background-image: linear-gradient(to right, #1578FF, #72A1FF );
+    border: none;
+    border-radius: 50px;
+    margin: 10px;
+
+}
+
+#follow_bt{
+    height: 30px;
+    width: 100px;
+    color: #1578FF;
+    background-color: white;
+    border: none;
+    border-radius: 50px;    
+    margin: 10px;
+}
+
+#profile_bg{
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+#bottom{
+    margin: 0;
+    margin-top: 10px;
+}
+
+#paging{
+    width: 70%;
+    margin: 0;
+    margin-left: 15%;
+    text-align: center;
 }
