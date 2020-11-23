@@ -1,0 +1,19 @@
+#main_content{
+    text-align: center;
+}
+#main_ct{
+    width: 90%;
+    margin-top: 130px;
+    margin-left: 5%;
+    font-weight: 100;
+}
+
+#upload_bt{
+    height: 30px;
+    width: 150px;
+    background-image: linear-gradient(to right, #1578FF, #72A1FF );
+    border: none;
+    border-radius: 50px;
+    color: white;
+    margin: 15px;
+}
